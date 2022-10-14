@@ -2,7 +2,6 @@
 
 public class PlayerInputsManager : MonoBehaviour
 {
-
     private PlayerInputsActions _playerInputActions;
 
     private void Awake() => _playerInputActions = new PlayerInputsActions();

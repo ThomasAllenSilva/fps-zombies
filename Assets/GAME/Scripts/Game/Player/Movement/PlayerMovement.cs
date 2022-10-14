@@ -26,10 +26,8 @@ public class PlayerMovement : MonoBehaviour
 
         _playerController.PlayerCharacterControllerManager.MovePlayerToDirection(directionPlayerShouldMove.normalized * playerWalkingSpeed);
 
-        //rotation
-        if (directionPlayerShouldMove != Vector3.zero)
-        {
-            gameObject.transform.forward = directionPlayerShouldMove;
-        }
+       //TODO: Move and Improve This Line of Code to Another Script
+       gameObject.transform.forward = _cameraTransform.forward;
+        
     }
 }
