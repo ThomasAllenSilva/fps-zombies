@@ -26,7 +26,7 @@ public class CinemachineCameraController : CinemachineExtension
 
         _cameraDesiredRotation.x += playerMouseDeltaInput.x * _cameraHorizontalSensitivity * Time.deltaTime;
         _cameraDesiredRotation.y = Mathf.Clamp(_cameraDesiredRotation.y += playerMouseDeltaInput.y * _cameraVerticalSensitivity * Time.deltaTime, -_cameraRotationYAngleMaxValue, _cameraRotationYAngleMaxValue);
-        
+
         state.RawOrientation = Quaternion.Euler(-_cameraDesiredRotation.y, _cameraDesiredRotation.x, 0f);
     }
 }
