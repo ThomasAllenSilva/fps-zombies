@@ -1438,6 +1438,7 @@ GameObject:
   m_Component:
   - component: {fileID: 543450652666683355}
   - component: {fileID: 1067169843}
+  - component: {fileID: 919132149013448034}
   m_Layer: 0
   m_Name: PlayerAssaultRifleHands
   m_TagString: Untagged
@@ -1445,6 +1446,33 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &919132149013448034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149013448033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 437f728593285d4438760d3396d93e61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bulletDamage: 0
+  _bulletsLeft: 0
+  _bulletsShot: 0
+  _magazineSize: 0
+  _bulletsPerTap: 0
+  _shootDelay: 0
+  _bulletSpread: 0
+  _bulletRange: 0
+  _reloadTime: 0
+  _timeBetweenShoots: 0
+  allowButtonHold: 0
+  shootSpawnPoint: {fileID: 0}
+  bulletMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &936833555837578126
 GameObject:
   m_ObjectHideFlags: 0

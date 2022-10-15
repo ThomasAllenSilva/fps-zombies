@@ -2,7 +2,7 @@
     "name": "PlayerInputsActions",
     "maps": [
         {
-            "name": "Player",
+            "name": "PlayerMovement",
             "id": "bcb93404-b78e-4d20-9651-983bebb66be8",
             "actions": [
                 {
@@ -96,6 +96,34 @@
                     "processors": "",
                     "groups": "",
                     "action": "Mouse",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "PlayerWeaponsController",
+            "id": "5d26232a-7f9e-45b6-9b22-95a3a1340a9e",
+            "actions": [
+                {
+                    "name": "Shoot",
+                    "type": "Button",
+                    "id": "dd051269-483f-4c00-91c5-973532b0dc00",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold(duration=0.01,pressPoint=0.01)",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "dc7daf4d-4ce9-4147-ab76-ed9117ee1b97",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Shoot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

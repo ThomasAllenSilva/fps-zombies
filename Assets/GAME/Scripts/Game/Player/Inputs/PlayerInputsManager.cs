@@ -1,14 +1,23 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PlayerInputsManager : MonoBehaviour
 {
     private PlayerInputsActions _playerInputActions;
 
-    private void Awake() => _playerInputActions = new PlayerInputsActions();
+    public event Action OnIsPressingShootButton;
+    public event Action OnStopPressingShootButton;
 
+    private void Awake()
+    {
+        _playerInputActions = new PlayerInputsActions();
+
+        _playerInputActions.PlayerWeaponsController.Shoot.performed += _ => OnIsPressingShootButton?.Invoke();
+        _playerInputActions.PlayerWeaponsController.Shoot.canceled += _ => OnStopPressingShootButton?.Invoke();
+    }
     public Vector2 PlayerMovementValue()
     {
-        return _playerInputActions.Player.Movement.ReadValue<Vector2>();
+        return _playerInputActions.PlayerMovement.Movement.ReadValue<Vector2>();
     }
 
     public Vector2 PlayerMouseDeltaValue()
