@@ -1,38 +1,29 @@
 fileFormatVersion: 2
-guid: eb2f1789827ec14478c26b07d7012b11
+guid: c1e25f49c12f38b42bbb89c9aea7f864
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable:
   - first:
-      74: -6602077506968488408
-    second: Armature|Arms_FPS_Anim_Idle
+      74: 2331060308045773406
+    second: Rig|Fire
   - first:
-      74: -4032466139791135938
-    second: Armature|Arms_FPS_Anim_OneShot
+      74: 711232249668257821
+    second: Rig|Hide
   - first:
-      74: 8104798901690063933
-    second: Armature|Arms_FPS_Anim_Walk
+      74: -8327829011040007889
+    second: Rig|Reload
   - first:
-      74: -8042862366128251083
-    second: Armature|FPS_Pistol_Fire
+      74: -1380664968699449888
+    second: Rig|Take
   - first:
-      74: 8743755097471460562
-    second: Armature|FPS_Pistol_Fire.001
+      74: 8269097334877607218
+    second: Rig|Watch
   - first:
-      74: 1644164990721993899
-    second: Armature|FPS_Pistol_Fire.002
+      74: -708691683448579900
+    second: Rig|WorldAction
   - first:
-      74: -2321862041872015811
-    second: Armature|FPS_Pistol_Idle
-  - first:
-      74: 915322567253105193
-    second: Armature|FPS_Pistol_Reload_easy
-  - first:
-      74: 2458721417013243687
-    second: Armature|FPS_Pistol_Reload_full
-  - first:
-      74: 7416177110705260776
-    second: Armature|FPS_Pistol_Walk
+      74: 8444902663994481597
+    second: Rig|WorldAction.001
   externalObjects: {}
   materials:
     materialImportMode: 1

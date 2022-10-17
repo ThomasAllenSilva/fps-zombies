@@ -24,7 +24,7 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
     ""name"": ""PlayerInputsActions"",
     ""maps"": [
         {
-            ""name"": ""PlayerMovement"",
+            ""name"": ""PlayerMovementController"",
             ""id"": ""bcb93404-b78e-4d20-9651-983bebb66be8"",
             ""actions"": [
                 {
@@ -135,6 +135,15 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Hold(duration=0.01,pressPoint=0.01)"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""0961554d-48bf-404b-9945-6f527c486083"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -148,21 +157,33 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
                     ""action"": ""Shoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""03f45359-bd68-46e4-b64e-94677015fc62"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
     ],
     ""controlSchemes"": []
 }");
-        // PlayerMovement
-        m_PlayerMovement = asset.FindActionMap("PlayerMovement", throwIfNotFound: true);
-        m_PlayerMovement_Movement = m_PlayerMovement.FindAction("Movement", throwIfNotFound: true);
+        // PlayerMovementController
+        m_PlayerMovementController = asset.FindActionMap("PlayerMovementController", throwIfNotFound: true);
+        m_PlayerMovementController_Movement = m_PlayerMovementController.FindAction("Movement", throwIfNotFound: true);
         // PlayerCameraController
         m_PlayerCameraController = asset.FindActionMap("PlayerCameraController", throwIfNotFound: true);
         m_PlayerCameraController_Mouse = m_PlayerCameraController.FindAction("Mouse", throwIfNotFound: true);
         // PlayerWeaponsController
         m_PlayerWeaponsController = asset.FindActionMap("PlayerWeaponsController", throwIfNotFound: true);
         m_PlayerWeaponsController_Shoot = m_PlayerWeaponsController.FindAction("Shoot", throwIfNotFound: true);
+        m_PlayerWeaponsController_Reload = m_PlayerWeaponsController.FindAction("Reload", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -219,29 +240,29 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
         return asset.FindBinding(bindingMask, out action);
     }
 
-    // PlayerMovement
-    private readonly InputActionMap m_PlayerMovement;
-    private IPlayerMovementActions m_PlayerMovementActionsCallbackInterface;
-    private readonly InputAction m_PlayerMovement_Movement;
-    public struct PlayerMovementActions
+    // PlayerMovementController
+    private readonly InputActionMap m_PlayerMovementController;
+    private IPlayerMovementControllerActions m_PlayerMovementControllerActionsCallbackInterface;
+    private readonly InputAction m_PlayerMovementController_Movement;
+    public struct PlayerMovementControllerActions
     {
         private @PlayerInputsActions m_Wrapper;
-        public PlayerMovementActions(@PlayerInputsActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Movement => m_Wrapper.m_PlayerMovement_Movement;
-        public InputActionMap Get() { return m_Wrapper.m_PlayerMovement; }
+        public PlayerMovementControllerActions(@PlayerInputsActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Movement => m_Wrapper.m_PlayerMovementController_Movement;
+        public InputActionMap Get() { return m_Wrapper.m_PlayerMovementController; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(PlayerMovementActions set) { return set.Get(); }
-        public void SetCallbacks(IPlayerMovementActions instance)
+        public static implicit operator InputActionMap(PlayerMovementControllerActions set) { return set.Get(); }
+        public void SetCallbacks(IPlayerMovementControllerActions instance)
         {
-            if (m_Wrapper.m_PlayerMovementActionsCallbackInterface != null)
+            if (m_Wrapper.m_PlayerMovementControllerActionsCallbackInterface != null)
             {
-                @Movement.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnMovement;
-                @Movement.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnMovement;
-                @Movement.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnMovement;
+                @Movement.started -= m_Wrapper.m_PlayerMovementControllerActionsCallbackInterface.OnMovement;
+                @Movement.performed -= m_Wrapper.m_PlayerMovementControllerActionsCallbackInterface.OnMovement;
+                @Movement.canceled -= m_Wrapper.m_PlayerMovementControllerActionsCallbackInterface.OnMovement;
             }
-            m_Wrapper.m_PlayerMovementActionsCallbackInterface = instance;
+            m_Wrapper.m_PlayerMovementControllerActionsCallbackInterface = instance;
             if (instance != null)
             {
                 @Movement.started += instance.OnMovement;
@@ -250,7 +271,7 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
             }
         }
     }
-    public PlayerMovementActions @PlayerMovement => new PlayerMovementActions(this);
+    public PlayerMovementControllerActions @PlayerMovementController => new PlayerMovementControllerActions(this);
 
     // PlayerCameraController
     private readonly InputActionMap m_PlayerCameraController;
@@ -289,11 +310,13 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_PlayerWeaponsController;
     private IPlayerWeaponsControllerActions m_PlayerWeaponsControllerActionsCallbackInterface;
     private readonly InputAction m_PlayerWeaponsController_Shoot;
+    private readonly InputAction m_PlayerWeaponsController_Reload;
     public struct PlayerWeaponsControllerActions
     {
         private @PlayerInputsActions m_Wrapper;
         public PlayerWeaponsControllerActions(@PlayerInputsActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Shoot => m_Wrapper.m_PlayerWeaponsController_Shoot;
+        public InputAction @Reload => m_Wrapper.m_PlayerWeaponsController_Reload;
         public InputActionMap Get() { return m_Wrapper.m_PlayerWeaponsController; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -306,6 +329,9 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
                 @Shoot.started -= m_Wrapper.m_PlayerWeaponsControllerActionsCallbackInterface.OnShoot;
                 @Shoot.performed -= m_Wrapper.m_PlayerWeaponsControllerActionsCallbackInterface.OnShoot;
                 @Shoot.canceled -= m_Wrapper.m_PlayerWeaponsControllerActionsCallbackInterface.OnShoot;
+                @Reload.started -= m_Wrapper.m_PlayerWeaponsControllerActionsCallbackInterface.OnReload;
+                @Reload.performed -= m_Wrapper.m_PlayerWeaponsControllerActionsCallbackInterface.OnReload;
+                @Reload.canceled -= m_Wrapper.m_PlayerWeaponsControllerActionsCallbackInterface.OnReload;
             }
             m_Wrapper.m_PlayerWeaponsControllerActionsCallbackInterface = instance;
             if (instance != null)
@@ -313,11 +339,14 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
                 @Shoot.started += instance.OnShoot;
                 @Shoot.performed += instance.OnShoot;
                 @Shoot.canceled += instance.OnShoot;
+                @Reload.started += instance.OnReload;
+                @Reload.performed += instance.OnReload;
+                @Reload.canceled += instance.OnReload;
             }
         }
     }
     public PlayerWeaponsControllerActions @PlayerWeaponsController => new PlayerWeaponsControllerActions(this);
-    public interface IPlayerMovementActions
+    public interface IPlayerMovementControllerActions
     {
         void OnMovement(InputAction.CallbackContext context);
     }
@@ -328,5 +357,6 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
     public interface IPlayerWeaponsControllerActions
     {
         void OnShoot(InputAction.CallbackContext context);
+        void OnReload(InputAction.CallbackContext context);
     }
 }

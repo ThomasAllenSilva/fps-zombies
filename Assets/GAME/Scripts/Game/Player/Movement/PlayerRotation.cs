@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerRotation : MonoBehaviour
 {
@@ -8,13 +6,7 @@ public class PlayerRotation : MonoBehaviour
 
     private PlayerController _playerController;
 
-    private void Awake()
-    {
-        _playerController = GetComponent<PlayerController>();
-    }
-    private void LateUpdate()
-    {
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(_playerController.PlayerCamera.eulerAngles), _playerRotationSpeed * Time.deltaTime);
-
-    }
+    private void Awake() => _playerController = GetComponent<PlayerController>();
+    
+    private void LateUpdate() => transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(_playerController.PlayerCamera.eulerAngles), _playerRotationSpeed * Time.deltaTime); 
 }

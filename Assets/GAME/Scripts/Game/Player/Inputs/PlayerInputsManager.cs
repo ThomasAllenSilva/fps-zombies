@@ -7,6 +7,7 @@ public class PlayerInputsManager : MonoBehaviour
 
     public event Action OnIsPressingShootButton;
     public event Action OnStopPressingShootButton;
+    public event Action OnPressedReloadButton;
 
     private void Awake()
     {
@@ -14,10 +15,13 @@ public class PlayerInputsManager : MonoBehaviour
 
         _playerInputActions.PlayerWeaponsController.Shoot.performed += _ => OnIsPressingShootButton?.Invoke();
         _playerInputActions.PlayerWeaponsController.Shoot.canceled += _ => OnStopPressingShootButton?.Invoke();
+
+        _playerInputActions.PlayerWeaponsController.Reload.performed += _ => OnPressedReloadButton?.Invoke();
     }
+
     public Vector2 PlayerMovementValue()
     {
-        return _playerInputActions.PlayerMovement.Movement.ReadValue<Vector2>();
+        return _playerInputActions.PlayerMovementController.Movement.ReadValue<Vector2>();
     }
 
     public Vector2 PlayerMouseDeltaValue()

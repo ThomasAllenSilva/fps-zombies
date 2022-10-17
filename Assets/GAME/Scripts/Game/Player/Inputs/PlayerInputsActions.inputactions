@@ -2,7 +2,7 @@
     "name": "PlayerInputsActions",
     "maps": [
         {
-            "name": "PlayerMovement",
+            "name": "PlayerMovementController",
             "id": "bcb93404-b78e-4d20-9651-983bebb66be8",
             "actions": [
                 {
@@ -113,6 +113,15 @@
                     "processors": "",
                     "interactions": "Hold(duration=0.01,pressPoint=0.01)",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Reload",
+                    "type": "Button",
+                    "id": "0961554d-48bf-404b-9945-6f527c486083",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -124,6 +133,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "03f45359-bd68-46e4-b64e-94677015fc62",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reload",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
