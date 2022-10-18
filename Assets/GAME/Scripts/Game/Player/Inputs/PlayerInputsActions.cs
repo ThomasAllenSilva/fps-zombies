@@ -35,6 +35,15 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""RunButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""049bcbdc-ac6e-444e-aa87-ce9973094817"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -92,6 +101,17 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""302230f9-24da-4251-bd53-e5c07de67819"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RunButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -177,6 +197,7 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
         // PlayerMovementController
         m_PlayerMovementController = asset.FindActionMap("PlayerMovementController", throwIfNotFound: true);
         m_PlayerMovementController_Movement = m_PlayerMovementController.FindAction("Movement", throwIfNotFound: true);
+        m_PlayerMovementController_RunButton = m_PlayerMovementController.FindAction("RunButton", throwIfNotFound: true);
         // PlayerCameraController
         m_PlayerCameraController = asset.FindActionMap("PlayerCameraController", throwIfNotFound: true);
         m_PlayerCameraController_Mouse = m_PlayerCameraController.FindAction("Mouse", throwIfNotFound: true);
@@ -244,11 +265,13 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_PlayerMovementController;
     private IPlayerMovementControllerActions m_PlayerMovementControllerActionsCallbackInterface;
     private readonly InputAction m_PlayerMovementController_Movement;
+    private readonly InputAction m_PlayerMovementController_RunButton;
     public struct PlayerMovementControllerActions
     {
         private @PlayerInputsActions m_Wrapper;
         public PlayerMovementControllerActions(@PlayerInputsActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_PlayerMovementController_Movement;
+        public InputAction @RunButton => m_Wrapper.m_PlayerMovementController_RunButton;
         public InputActionMap Get() { return m_Wrapper.m_PlayerMovementController; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -261,6 +284,9 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
                 @Movement.started -= m_Wrapper.m_PlayerMovementControllerActionsCallbackInterface.OnMovement;
                 @Movement.performed -= m_Wrapper.m_PlayerMovementControllerActionsCallbackInterface.OnMovement;
                 @Movement.canceled -= m_Wrapper.m_PlayerMovementControllerActionsCallbackInterface.OnMovement;
+                @RunButton.started -= m_Wrapper.m_PlayerMovementControllerActionsCallbackInterface.OnRunButton;
+                @RunButton.performed -= m_Wrapper.m_PlayerMovementControllerActionsCallbackInterface.OnRunButton;
+                @RunButton.canceled -= m_Wrapper.m_PlayerMovementControllerActionsCallbackInterface.OnRunButton;
             }
             m_Wrapper.m_PlayerMovementControllerActionsCallbackInterface = instance;
             if (instance != null)
@@ -268,6 +294,9 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
                 @Movement.started += instance.OnMovement;
                 @Movement.performed += instance.OnMovement;
                 @Movement.canceled += instance.OnMovement;
+                @RunButton.started += instance.OnRunButton;
+                @RunButton.performed += instance.OnRunButton;
+                @RunButton.canceled += instance.OnRunButton;
             }
         }
     }
@@ -349,6 +378,7 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
     public interface IPlayerMovementControllerActions
     {
         void OnMovement(InputAction.CallbackContext context);
+        void OnRunButton(InputAction.CallbackContext context);
     }
     public interface IPlayerCameraControllerActions
     {

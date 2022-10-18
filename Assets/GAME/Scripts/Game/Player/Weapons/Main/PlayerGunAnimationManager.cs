@@ -4,7 +4,7 @@
 
 public class PlayerGunAnimationManager : MonoBehaviour
 {
-    [SerializeField] private AnimationClip _reloadGunAnimationState;
+    [SerializeField] private AnimationClip _reloadGunAnimation;
 
     private PlayerGunController _playerGunController;
 
@@ -12,25 +12,102 @@ public class PlayerGunAnimationManager : MonoBehaviour
 
     private GunAnimationStates _currentAnimationState = GunAnimationStates.Gun_Draw;
 
+    private bool _canPlayAnimations;
+
     private void Awake()
     {
         _playerGunAnimator = GetComponent<Animator>();
         _playerGunController = GetComponent<PlayerGunController>();
     }
 
-    private void Start()
+    private void LateUpdate()
     {
-        _playerGunController.PlayerGunShootManager.OnPlayerStartReloading += PlayReloadGunAnimation;
-        _playerGunController.PlayerController.PlayerInputsManager.OnIsPressingShootButton += PlayShootingGunAnimation;
+        if (_canPlayAnimations)
+        {
+            if (!PlayerIsShooting() && !PlayerIsReloading())
+            {
+                if (PlayerIsMoving())
+                {
+                    if (PlayerIsRunning())
+                    {
+                        PlayRunningGunAnimation();
+                    }
+
+                    else
+                    {
+                        PlayWalkingGunAnimation();
+                    }
+                }
+
+                else
+                {
+                    PlayIdleGunAnimation();
+                }
+            }
+
+            else
+            {
+                if (PlayerIsShooting() && !PlayerIsReloading())
+                {
+                    PlayShootingGunAnimation();
+                }
+
+                else if (PlayerIsReloading())
+                {
+                    PlayReloadGunAnimation();
+                }
+            }
+        }
+    }
+
+    private bool PlayerIsRunning()
+    {
+        return _playerGunController.GetPlayerController().PlayerMovementManager.PlayerIsMovingInFowardDirecion && _playerGunController.GetPlayerController().PlayerMovementManager.PlayerIsRunning;
+    }
+
+    private bool PlayerIsMoving()
+    {
+        return _playerGunController.GetPlayerController().PlayerInputsManager.PlayerMovementValue() != Vector2.zero;
+    }
+
+    private bool PlayerIsShooting()
+    {
+        return _playerGunController.PlayerGunShootManager.PlayerIsShooting;
+    }
+
+    private bool PlayerIsReloading()
+    {
+        return _playerGunController.PlayerGunShootManager.PlayerIsReloading;
     }
 
     private void PlayReloadGunAnimation()
     {
         ChangeCurrentAnimationState(GunAnimationStates.Gun_Reload);
     }
+
     private void PlayShootingGunAnimation()
     {
         ChangeCurrentAnimationState(GunAnimationStates.Gun_Shoot);
+    }
+
+    private void PlayWalkingGunAnimation()
+    {
+        ChangeCurrentAnimationState(GunAnimationStates.Gun_Walk);
+    }
+
+    private void PlayRunningGunAnimation()
+    {
+        ChangeCurrentAnimationState(GunAnimationStates.Gun_Run);
+    }
+
+    private void PlayIdleGunAnimation()
+    {
+        ChangeCurrentAnimationState(GunAnimationStates.Gun_Idle);
+    }
+
+    private void PlayDrawGunAnimation()
+    {
+        ChangeCurrentAnimationState(GunAnimationStates.Gun_Draw);
     }
 
     private void ChangeCurrentAnimationState(GunAnimationStates animationToPlay)
@@ -44,13 +121,32 @@ public class PlayerGunAnimationManager : MonoBehaviour
 
     public float GetGunReloadAnimationTime()
     {
-        return _reloadGunAnimationState.length;
+        return _reloadGunAnimation.length;
     }
 
-    private enum GunAnimationStates 
+    public void AllowPlayAnimations()
+    {
+        _canPlayAnimations = true;
+    }
+
+    private void OnEnable()
+    {
+        PlayDrawGunAnimation();
+    }
+
+    private void OnDisable()
+    {
+        _canPlayAnimations = false;
+    }
+
+    private enum GunAnimationStates
     {
         Gun_Draw,
+        Gun_Idle,
+        Gun_Walk,
+        Gun_Run,
+        Gun_Shoot,
         Gun_Reload,
-        Gun_Shoot
+        Gun_Inspect
     }
 }

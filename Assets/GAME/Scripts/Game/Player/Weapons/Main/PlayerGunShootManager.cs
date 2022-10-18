@@ -1,12 +1,9 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(PlayerGunController))]
 
 public class PlayerGunShootManager : MonoBehaviour
 {
-    private static PlayerController _playerController;
-
     private PlayerGunController _playerGunController;
 
     [SerializeField] private int _bulletDamage;
@@ -25,11 +22,7 @@ public class PlayerGunShootManager : MonoBehaviour
 
     private float _gunReloadTime;
 
-    private bool _playerIsPressingShootButton;
-
     private bool _playerCanShoot = true;
-
-    private bool _reloading;
 
     private int _bulletsLeft;
 
@@ -37,22 +30,22 @@ public class PlayerGunShootManager : MonoBehaviour
 
     private readonly RaycastHit[] rayHit = new RaycastHit[1];
 
-    public event Action OnPlayerStartReloading;
+    public bool PlayerIsShooting { get; private set; }
+
+    public bool PlayerIsReloading { get; private set; }
 
     private void Awake()
     {
-        _playerController = transform.parent.parent.GetComponent<PlayerController>();
-
         _playerGunController = GetComponent<PlayerGunController>();
     }
     
     private void Start()
     {
-        _playerController.PlayerInputsManager.OnIsPressingShootButton += PlayerIsPressingShootButton;
+        _playerGunController.GetPlayerController().PlayerInputsManager.OnIsPressingShootButton += PlayerIsPressingShootButton;
 
-        _playerController.PlayerInputsManager.OnStopPressingShootButton += PlayerHasStopedShooting;
+        _playerGunController.GetPlayerController().PlayerInputsManager.OnStoppedPressingShootButton += PlayerHasStoppedShooting;
 
-        _playerController.PlayerInputsManager.OnPressedReloadButton += ReloadGun;
+        _playerGunController.GetPlayerController().PlayerInputsManager.OnPressedReloadButton += ReloadGun;
 
         _bulletsLeft = _gunMagazineSize;
 
@@ -61,7 +54,7 @@ public class PlayerGunShootManager : MonoBehaviour
 
     private void Update()
     {
-        if (CheckIfPlayerCanShoot() && _playerIsPressingShootButton)
+        if (CheckIfPlayerCanShoot() && PlayerIsShooting)
         {
             Shoot();
         }
@@ -69,7 +62,7 @@ public class PlayerGunShootManager : MonoBehaviour
 
     private bool CheckIfPlayerCanShoot()
     {
-        return _playerCanShoot && !_reloading && _bulletsLeft > 0;
+        return _playerCanShoot && !PlayerIsReloading && _bulletsLeft > 0;
     }
 
     private void Shoot()
@@ -85,19 +78,15 @@ public class PlayerGunShootManager : MonoBehaviour
             //TODO Handle ray collision
         }
 
-        if(_bulletsLeft > 0)
-        Invoke(nameof(AllowPlayerShootAgain), _shootDelay);
+        if(_bulletsLeft > 0) Invoke(nameof(AllowPlayerShootAgain), _shootDelay);
 
-        else
-        {
-            ReloadGun();
-        }
+        else ReloadGun();   
     }
 
     private Vector3 GetRandomBulletSpreadValue()
     {
-        _randomBulletSpreadValue.x = UnityEngine.Random.Range(-_bulletSpreadMaxRange, _bulletSpreadMaxRange);
-        _randomBulletSpreadValue.y = UnityEngine.Random.Range(-_bulletSpreadMaxRange, _bulletSpreadMaxRange);
+        _randomBulletSpreadValue.x = Random.Range(-_bulletSpreadMaxRange, _bulletSpreadMaxRange);
+        _randomBulletSpreadValue.y = Random.Range(-_bulletSpreadMaxRange, _bulletSpreadMaxRange);
 
         return _randomBulletSpreadValue;
     }
@@ -107,29 +96,31 @@ public class PlayerGunShootManager : MonoBehaviour
         _playerCanShoot = true;
     }
 
-    private void PlayerHasStopedShooting()
+    private void PlayerHasStoppedShooting()
     {
-        _playerIsPressingShootButton = false;
+        PlayerIsShooting = false;
     }
 
     private void PlayerIsPressingShootButton()
     {
-        _playerIsPressingShootButton = true;
+        PlayerIsShooting = true;
     }
 
     private void ReloadGun()
     {
-        _reloading = true;
-        OnPlayerStartReloading?.Invoke();
-        Invoke(nameof(ReloadFinished), _gunReloadTime);
+        if (!PlayerIsReloading && _bulletsLeft < _gunMagazineSize)
+        {
+            PlayerIsReloading = true;
+            Invoke(nameof(ReloadFinished), _gunReloadTime);
+        }
     }
 
     private void ReloadFinished()
     {
         _bulletsLeft = _gunMagazineSize;
 
-        AllowPlayerShootAgain();
+        PlayerIsReloading = false;
 
-        _reloading = false;
+        AllowPlayerShootAgain();
     }
 }

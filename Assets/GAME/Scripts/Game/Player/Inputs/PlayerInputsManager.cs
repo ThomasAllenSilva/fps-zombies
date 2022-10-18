@@ -6,17 +6,24 @@ public class PlayerInputsManager : MonoBehaviour
     private PlayerInputsActions _playerInputActions;
 
     public event Action OnIsPressingShootButton;
-    public event Action OnStopPressingShootButton;
+    public event Action OnStoppedPressingShootButton;
+
     public event Action OnPressedReloadButton;
+
+    public event Action OnPlayerIsPressingRunButton;
+    public event Action OnPlayerStoppedPressingRunButton;
 
     private void Awake()
     {
         _playerInputActions = new PlayerInputsActions();
 
         _playerInputActions.PlayerWeaponsController.Shoot.performed += _ => OnIsPressingShootButton?.Invoke();
-        _playerInputActions.PlayerWeaponsController.Shoot.canceled += _ => OnStopPressingShootButton?.Invoke();
+        _playerInputActions.PlayerWeaponsController.Shoot.canceled += _ => OnStoppedPressingShootButton?.Invoke();
 
         _playerInputActions.PlayerWeaponsController.Reload.performed += _ => OnPressedReloadButton?.Invoke();
+
+        _playerInputActions.PlayerMovementController.RunButton.performed += _ => OnPlayerIsPressingRunButton?.Invoke();
+        _playerInputActions.PlayerMovementController.RunButton.canceled += _ => OnPlayerStoppedPressingRunButton?.Invoke();
     }
 
     public Vector2 PlayerMovementValue()
