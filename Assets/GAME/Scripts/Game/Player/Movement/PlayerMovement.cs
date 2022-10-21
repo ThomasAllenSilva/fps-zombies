@@ -4,7 +4,7 @@
 
 public class PlayerMovement : MonoBehaviour
 {
-    [Range(3f, 5f)] [SerializeField] private float playerWalkingSpeed = 2f;
+    [Range(3f, 8f)] [SerializeField] private float playerWalkingSpeed = 2f;
 
     [Range(5f, 12f)] [SerializeField] private float playerRunningSpeed = 4f;
 

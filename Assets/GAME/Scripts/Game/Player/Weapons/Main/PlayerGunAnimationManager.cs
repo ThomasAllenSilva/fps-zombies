@@ -6,11 +6,25 @@ public class PlayerGunAnimationManager : MonoBehaviour
 {
     [SerializeField] private AnimationClip _reloadGunAnimation;
 
+    [Range(1f, 8f)] [SerializeField] private float _animationsTransitionSpeed = 4f;
+
     private PlayerGunController _playerGunController;
 
     private Animator _playerGunAnimator;
 
     private GunAnimationStates _currentAnimationState = GunAnimationStates.Gun_Draw;
+
+    private const float RunAnimationFloatValue = 1f;
+
+    private const float WalkAnimationFloatValue = 1.5f;
+
+    private const float IdleAnimationFloatValue = 2f;
+
+    private const float ShootAnimationFloatValue = 3f;
+
+    private const string BlendTreeAnimationParameterName = "CurrentPlayerAnimationStateValue";
+
+    private float blendTreeAnimationParameterValue = 2f;
 
     private bool _canPlayAnimations;
 
@@ -28,34 +42,19 @@ public class PlayerGunAnimationManager : MonoBehaviour
             {
                 if (PlayerIsMoving())
                 {
-                    if (PlayerIsRunning())
-                    {
-                        PlayRunningGunAnimation();
-                    }
-
-                    else
-                    {
-                        PlayWalkingGunAnimation();
-                    }
+                    if (PlayerIsRunning()) ChangeBlendTreeAnimationParameterValueTo(RunAnimationFloatValue);
+                    
+                    else ChangeBlendTreeAnimationParameterValueTo(WalkAnimationFloatValue);
                 }
 
-                else
-                {
-                    PlayIdleGunAnimation();
-                }
+                else ChangeBlendTreeAnimationParameterValueTo(IdleAnimationFloatValue);
             }
 
             else
-            {
-                if (PlayerIsShooting() && !PlayerIsReloading())
-                {
-                    PlayShootingGunAnimation();
-                }
-
-                else if (PlayerIsReloading())
-                {
-                    PlayReloadGunAnimation();
-                }
+            { 
+                if (!PlayerIsReloading()) ChangeBlendTreeAnimationParameterValueTo(ShootAnimationFloatValue);
+              
+                else ChangeCurrentAnimationState(GunAnimationStates.Gun_Reload);    
             }
         }
     }
@@ -80,29 +79,18 @@ public class PlayerGunAnimationManager : MonoBehaviour
         return _playerGunController.PlayerGunShootManager.PlayerIsReloading;
     }
 
-    private void PlayReloadGunAnimation()
+    private void ChangeBlendTreeAnimationParameterValueTo(float targetValue)
     {
-        ChangeCurrentAnimationState(GunAnimationStates.Gun_Reload);
-    }
+        if (blendTreeAnimationParameterValue != targetValue)
+        {
+            if (targetValue == ShootAnimationFloatValue) blendTreeAnimationParameterValue = ShootAnimationFloatValue;
 
-    private void PlayShootingGunAnimation()
-    {
-        ChangeCurrentAnimationState(GunAnimationStates.Gun_Shoot);
-    }
+            else blendTreeAnimationParameterValue = Mathf.MoveTowards(blendTreeAnimationParameterValue, targetValue, Time.deltaTime * _animationsTransitionSpeed);
+        }
 
-    private void PlayWalkingGunAnimation()
-    {
-        ChangeCurrentAnimationState(GunAnimationStates.Gun_Walk);
-    }
+        _playerGunAnimator.SetFloat(BlendTreeAnimationParameterName, blendTreeAnimationParameterValue);
 
-    private void PlayRunningGunAnimation()
-    {
-        ChangeCurrentAnimationState(GunAnimationStates.Gun_Run);
-    }
-
-    private void PlayIdleGunAnimation()
-    {
-        ChangeCurrentAnimationState(GunAnimationStates.Gun_Idle);
+        ChangeCurrentAnimationState(GunAnimationStates.Gun_BlendTree);
     }
 
     private void PlayDrawGunAnimation()
@@ -142,10 +130,7 @@ public class PlayerGunAnimationManager : MonoBehaviour
     private enum GunAnimationStates
     {
         Gun_Draw,
-        Gun_Idle,
-        Gun_Walk,
-        Gun_Run,
-        Gun_Shoot,
+        Gun_BlendTree,
         Gun_Reload,
         Gun_Inspect
     }

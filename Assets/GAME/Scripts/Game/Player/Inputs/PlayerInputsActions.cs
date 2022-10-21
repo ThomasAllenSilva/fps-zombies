@@ -164,6 +164,15 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""Button"",
+                    ""id"": ""afcf1764-7b67-406f-abe7-f9770aa56127"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -188,6 +197,17 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
                     ""action"": ""Reload"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8737ee97-eec3-446d-bd27-166c1fd87790"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": ""Hold(duration=0.1,pressPoint=0.1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -205,6 +225,7 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
         m_PlayerWeaponsController = asset.FindActionMap("PlayerWeaponsController", throwIfNotFound: true);
         m_PlayerWeaponsController_Shoot = m_PlayerWeaponsController.FindAction("Shoot", throwIfNotFound: true);
         m_PlayerWeaponsController_Reload = m_PlayerWeaponsController.FindAction("Reload", throwIfNotFound: true);
+        m_PlayerWeaponsController_Aim = m_PlayerWeaponsController.FindAction("Aim", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -340,12 +361,14 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
     private IPlayerWeaponsControllerActions m_PlayerWeaponsControllerActionsCallbackInterface;
     private readonly InputAction m_PlayerWeaponsController_Shoot;
     private readonly InputAction m_PlayerWeaponsController_Reload;
+    private readonly InputAction m_PlayerWeaponsController_Aim;
     public struct PlayerWeaponsControllerActions
     {
         private @PlayerInputsActions m_Wrapper;
         public PlayerWeaponsControllerActions(@PlayerInputsActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Shoot => m_Wrapper.m_PlayerWeaponsController_Shoot;
         public InputAction @Reload => m_Wrapper.m_PlayerWeaponsController_Reload;
+        public InputAction @Aim => m_Wrapper.m_PlayerWeaponsController_Aim;
         public InputActionMap Get() { return m_Wrapper.m_PlayerWeaponsController; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -361,6 +384,9 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
                 @Reload.started -= m_Wrapper.m_PlayerWeaponsControllerActionsCallbackInterface.OnReload;
                 @Reload.performed -= m_Wrapper.m_PlayerWeaponsControllerActionsCallbackInterface.OnReload;
                 @Reload.canceled -= m_Wrapper.m_PlayerWeaponsControllerActionsCallbackInterface.OnReload;
+                @Aim.started -= m_Wrapper.m_PlayerWeaponsControllerActionsCallbackInterface.OnAim;
+                @Aim.performed -= m_Wrapper.m_PlayerWeaponsControllerActionsCallbackInterface.OnAim;
+                @Aim.canceled -= m_Wrapper.m_PlayerWeaponsControllerActionsCallbackInterface.OnAim;
             }
             m_Wrapper.m_PlayerWeaponsControllerActionsCallbackInterface = instance;
             if (instance != null)
@@ -371,6 +397,9 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
                 @Reload.started += instance.OnReload;
                 @Reload.performed += instance.OnReload;
                 @Reload.canceled += instance.OnReload;
+                @Aim.started += instance.OnAim;
+                @Aim.performed += instance.OnAim;
+                @Aim.canceled += instance.OnAim;
             }
         }
     }
@@ -388,5 +417,6 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
     {
         void OnShoot(InputAction.CallbackContext context);
         void OnReload(InputAction.CallbackContext context);
+        void OnAim(InputAction.CallbackContext context);
     }
 }

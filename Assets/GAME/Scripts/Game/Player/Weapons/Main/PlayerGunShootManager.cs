@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 [RequireComponent(typeof(PlayerGunController))]
 
@@ -14,7 +15,7 @@ public class PlayerGunShootManager : MonoBehaviour
 
     [SerializeField] private float _shootDelay;
 
-    [SerializeField] private float _bulletSpreadMaxRange;
+    [SerializeField] private float _bulletSpreadRange;
 
     [SerializeField] private float maxDistanceTheBulletCanHit;
 
@@ -26,17 +27,28 @@ public class PlayerGunShootManager : MonoBehaviour
 
     private int _bulletsLeft;
 
-    private Vector3 _randomBulletSpreadValue = new Vector3(0f, 0f, 0f);
+    private Vector3 _randomBulletSpreadRangeValue = new Vector3(0f, 0f, 0f);
 
     private readonly RaycastHit[] rayHit = new RaycastHit[1];
+
+    private float _defaultBulletSpreadRangeValue;
 
     public bool PlayerIsShooting { get; private set; }
 
     public bool PlayerIsReloading { get; private set; }
 
+    [SerializeField] private Transform _weaponAimPosition;
+    private Vector3 _weaponDefaultPosition = new Vector3(0f, .65f, -.07f);
+    [SerializeField] private float _weaponAimSpeed;
+    private bool _playerIsHoldingAimButton;
+
     private void Awake()
     {
         _playerGunController = GetComponent<PlayerGunController>();
+
+        _defaultBulletSpreadRangeValue = _bulletSpreadRange;
+
+        
     }
     
     private void Start()
@@ -47,9 +59,38 @@ public class PlayerGunShootManager : MonoBehaviour
 
         _playerGunController.GetPlayerController().PlayerInputsManager.OnPressedReloadButton += ReloadGun;
 
-        _bulletsLeft = _gunMagazineSize;
+        _playerGunController.GetPlayerController().PlayerInputsManager.OnPlayerIsPressingAimButton += AimWeapon;
 
+        _playerGunController.GetPlayerController().PlayerInputsManager.OnPlayerStoppedPressingAimButtom += StopAimWeapon;
+
+        _bulletsLeft = _gunMagazineSize;
+        
         _gunReloadTime = _playerGunController.PlayerGunAnimationManager.GetGunReloadAnimationTime();
+    }
+
+    private void StopAimWeapon()
+    {
+        _playerIsHoldingAimButton = false;
+        StartCoroutine(MoveWeaponToTheDefaultPosition());
+   
+        _bulletSpreadRange = _defaultBulletSpreadRangeValue;
+    }
+
+    private IEnumerator MoveWeaponToTheDefaultPosition()
+    {
+        while (transform.localPosition != _weaponDefaultPosition && !_playerIsHoldingAimButton)
+        {
+            transform.localPosition = Vector3.MoveTowards(transform.localPosition, _weaponDefaultPosition, _weaponAimSpeed * Time.deltaTime);
+            yield return null;
+        }
+    }
+
+    private void AimWeapon()
+    {
+        _playerIsHoldingAimButton = true;
+        StartCoroutine(MoveWeaponToTheAimPosition());
+        
+        _bulletSpreadRange *= 0.5f;
     }
 
     private void Update()
@@ -85,10 +126,10 @@ public class PlayerGunShootManager : MonoBehaviour
 
     private Vector3 GetRandomBulletSpreadValue()
     {
-        _randomBulletSpreadValue.x = Random.Range(-_bulletSpreadMaxRange, _bulletSpreadMaxRange);
-        _randomBulletSpreadValue.y = Random.Range(-_bulletSpreadMaxRange, _bulletSpreadMaxRange);
+        _randomBulletSpreadRangeValue.x = Random.Range(-_bulletSpreadRange, _bulletSpreadRange);
+        _randomBulletSpreadRangeValue.y = Random.Range(-_bulletSpreadRange, _bulletSpreadRange);
 
-        return _randomBulletSpreadValue;
+        return _randomBulletSpreadRangeValue;
     }
 
     private void AllowPlayerShootAgain()
@@ -122,5 +163,14 @@ public class PlayerGunShootManager : MonoBehaviour
         PlayerIsReloading = false;
 
         AllowPlayerShootAgain();
+    }
+
+    private IEnumerator MoveWeaponToTheAimPosition()
+    {
+        while (transform.localPosition != _weaponAimPosition.localPosition && _playerIsHoldingAimButton)
+        {
+            transform.localPosition = Vector3.MoveTowards(transform.localPosition, _weaponAimPosition.localPosition, _weaponAimSpeed * Time.deltaTime);
+            yield return null;
+        }
     }
 }
