@@ -5,10 +5,10 @@ public class PlayerInputsManager : MonoBehaviour
 {
     private PlayerInputsActions _playerInputActions;
 
-    public event Action OnIsPressingShootButton;
-    public event Action OnStoppedPressingShootButton;
+    public event Action OnPlayerIsPressingShootButton;
+    public event Action OnPlayerStoppedPressingShootButton;
 
-    public event Action OnPressedReloadButton;
+    public event Action OnPlayerPressedReloadButton;
 
     public event Action OnPlayerIsPressingRunButton;
     public event Action OnPlayerStoppedPressingRunButton;
@@ -20,13 +20,13 @@ public class PlayerInputsManager : MonoBehaviour
     {
         _playerInputActions = new PlayerInputsActions();
 
-        _playerInputActions.PlayerWeaponsController.Shoot.performed += _ => OnIsPressingShootButton?.Invoke();
-        _playerInputActions.PlayerWeaponsController.Shoot.canceled += _ => OnStoppedPressingShootButton?.Invoke();
+        _playerInputActions.PlayerWeaponsController.Shoot.performed += _ => OnPlayerIsPressingShootButton?.Invoke();
+        _playerInputActions.PlayerWeaponsController.Shoot.canceled += _ => OnPlayerStoppedPressingShootButton?.Invoke();
 
         _playerInputActions.PlayerWeaponsController.Aim.performed += _ => OnPlayerIsPressingAimButton?.Invoke();
         _playerInputActions.PlayerWeaponsController.Aim.canceled += _ => OnPlayerStoppedPressingAimButtom?.Invoke();
 
-        _playerInputActions.PlayerWeaponsController.Reload.performed += _ => OnPressedReloadButton?.Invoke();
+        _playerInputActions.PlayerWeaponsController.Reload.performed += _ => OnPlayerPressedReloadButton?.Invoke();
 
         _playerInputActions.PlayerMovementController.RunButton.performed += _ => OnPlayerIsPressingRunButton?.Invoke();
         _playerInputActions.PlayerMovementController.RunButton.canceled += _ => OnPlayerStoppedPressingRunButton?.Invoke();
@@ -55,5 +55,21 @@ public class PlayerInputsManager : MonoBehaviour
     private void OnDisable()
     {
         _playerInputActions.Disable();
+    }
+
+    private void RemoveAllListenersFromAllEvents()
+    {
+        OnPlayerPressedReloadButton = delegate { };
+        OnPlayerStoppedPressingRunButton = delegate { };
+        OnPlayerStoppedPressingShootButton = delegate { };
+        OnPlayerIsPressingShootButton = delegate { };
+        OnPlayerIsPressingRunButton = delegate { };
+        OnPlayerIsPressingAimButton = delegate { };
+        OnPlayerStoppedPressingAimButtom = delegate { };
+    }
+
+    private void OnDestroy()
+    {
+        RemoveAllListenersFromAllEvents();
     }
 }

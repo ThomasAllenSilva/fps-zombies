@@ -15591,6 +15591,7 @@ Transform:
   - {fileID: 1236087175}
   - {fileID: 1753038250}
   - {fileID: 1022424072}
+  - {fileID: 1669369400}
   - {fileID: 1067603116}
   - {fileID: 1217559719}
   - {fileID: 999984788}
@@ -15615,7 +15616,6 @@ Transform:
   - {fileID: 331143847}
   - {fileID: 2081147100}
   - {fileID: 291760927}
-  - {fileID: 1669369400}
   - {fileID: 144991882}
   - {fileID: 558979657}
   - {fileID: 304827122}
@@ -39104,6 +39104,7 @@ GameObject:
   - component: {fileID: 1043166746}
   - component: {fileID: 1043166745}
   - component: {fileID: 1043166744}
+  - component: {fileID: 1043166748}
   m_Layer: 8
   m_Name: PlayerAssaultRifleHands
   m_TagString: Untagged
@@ -39163,8 +39164,6 @@ MonoBehaviour:
   _bulletLayerMask:
     serializedVersion: 2
     m_Bits: 55
-  _weaponAimPosition: {fileID: 560263781}
-  _weaponAimSpeed: 1.2
 --- !u!114 &1043166746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39196,6 +39195,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1043166748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043166742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0b6bc3c1f8f1c3409f400d5508417d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _weaponAimSpeed: 1
 --- !u!1001 &1045207734
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -61794,7 +61806,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 355665367}
-  m_RootOrder: 117
+  m_RootOrder: 93
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1671362116
 PrefabInstance:
@@ -62579,8 +62591,6 @@ MonoBehaviour:
   _bulletLayerMask:
     serializedVersion: 2
     m_Bits: 55
-  _weaponAimPosition: {fileID: 0}
-  _weaponAimSpeed: 0
 --- !u!114 &1696670653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73964,7 +73974,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerWalkingSpeed: 6.5
-  playerRunningSpeed: 8.5
+  playerRunningSpeed: 9
 --- !u!114 &2037593665
 MonoBehaviour:
   m_ObjectHideFlags: 0
