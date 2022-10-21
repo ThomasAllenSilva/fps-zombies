@@ -10,8 +10,6 @@ public class PlayerMovement : MonoBehaviour
 
     private PlayerController _playerController;
 
-    private Transform _cameraTransform;
-
     public bool PlayerIsRunning { get; private set; }
 
     public bool PlayerIsWalking { get {return _playerController.PlayerInputsManager.PlayerMovementValue() != Vector2.zero && !PlayerIsRunning; } private set { PlayerIsWalking = value; } }
@@ -21,8 +19,6 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         _playerController = GetComponent<PlayerController>();
-   
-        _cameraTransform = Camera.main.transform;
     }
 
     private void Start()
@@ -34,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        Vector3 directionPlayerShouldMove = _cameraTransform.forward * _playerController.PlayerInputsManager.PlayerMovementValue().y + _cameraTransform.right * _playerController.PlayerInputsManager.PlayerMovementValue().x;
+        Vector3 directionPlayerShouldMove = _playerController.PlayerCamera.forward * _playerController.PlayerInputsManager.PlayerMovementValue().y + _playerController.PlayerCamera.right * _playerController.PlayerInputsManager.PlayerMovementValue().x;
 
         directionPlayerShouldMove.y = 0;
 
