@@ -15714,9 +15714,8 @@ Transform:
   - {fileID: 636710154}
   - {fileID: 1636625647}
   - {fileID: 691082158}
-  - {fileID: 1512092630}
-  - {fileID: 302127362}
   - {fileID: 266920449}
+  - {fileID: 302127362}
   - {fileID: 1840608954}
   - {fileID: 1460211602}
   - {fileID: 1370822685}
@@ -15758,6 +15757,7 @@ Transform:
   - {fileID: 1590514270}
   - {fileID: 1978078123}
   - {fileID: 1293946460}
+  - {fileID: 1512092630}
   - {fileID: 79283406}
   - {fileID: 1902767788}
   - {fileID: 1217598401}
@@ -39142,7 +39142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _reloadGunAnimation: {fileID: 7400000, guid: 0ebfd694c63483a4db5ac1ae84f6a689, type: 2}
-  _animationsTransitionSpeed: 4
+  _animationsTransitionSpeed: 6
 --- !u!114 &1043166745
 MonoBehaviour:
   m_ObjectHideFlags: 0

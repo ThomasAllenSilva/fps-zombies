@@ -132,6 +132,7 @@ public class PlayerGunShootManager : MonoBehaviour
         if (!PlayerIsReloading && _bulletsLeft < _gunMagazineSize)
         {
             PlayerIsReloading = true;
+            PlayerGlobalGunManager.SetPlayerIsReloadingToTrue();
             Invoke(nameof(ReloadFinished), _gunReloadTime);
         }
     }
@@ -142,6 +143,7 @@ public class PlayerGunShootManager : MonoBehaviour
 
         PlayerIsReloading = false;
 
+        PlayerGlobalGunManager.SetPlayerIsReloadingToFalse();
         AllowPlayerShootAgain();
     }
 }

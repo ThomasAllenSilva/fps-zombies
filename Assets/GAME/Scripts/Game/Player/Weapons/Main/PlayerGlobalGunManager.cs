@@ -4,6 +4,8 @@
 
     public static bool PlayerIsShooting { get; private set; }
 
+    public static bool PlayerIsReloading { get; private set; }
+
     public static void SetPlayerIsAimingToTrue()
     {
         PlayerIsAiming = true;
@@ -22,5 +24,15 @@
     public static void SetPlayerIsShootingToFalse()
     {
         PlayerIsShooting = false;
+    }
+
+    public static void SetPlayerIsReloadingToTrue()
+    {
+        PlayerIsReloading = true;
+    }
+
+    public static void SetPlayerIsReloadingToFalse()
+    {
+        PlayerIsReloading = false;
     }
 }

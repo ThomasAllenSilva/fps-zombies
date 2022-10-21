@@ -6,7 +6,7 @@ public class PlayerGunAnimationManager : MonoBehaviour
 {
     [SerializeField] private AnimationClip _reloadGunAnimation;
 
-    [Range(1f, 8f)] [SerializeField] private float _animationsTransitionSpeed = 4f;
+    [Range(1f, 12f)] [SerializeField] private float _animationsTransitionSpeed = 4f;
 
     private PlayerGunController _playerGunController;
 
