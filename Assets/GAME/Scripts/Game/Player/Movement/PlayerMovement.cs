@@ -40,7 +40,7 @@ public class PlayerMovement : MonoBehaviour
 
         PlayerIsMovingInFowardDirecion = Vector3.Dot(transform.forward, directionPlayerShouldMove) > 0.5f;
 
-        if (PlayerIsRunningInFowardDirection())
+        if (PlayerIsRunningInFowardDirection() && PlayerIsNotShooting() && PlayerIsNotAiming())
         {
             _playerController.PlayerCharacterControllerManager.MovePlayerToDirection(directionPlayerShouldMove.normalized * playerRunningSpeed);
         }
@@ -53,6 +53,16 @@ public class PlayerMovement : MonoBehaviour
         bool PlayerIsRunningInFowardDirection()
         {
             return PlayerIsRunning && PlayerIsMovingInFowardDirecion;
+        }
+
+        bool PlayerIsNotAiming()
+        {
+            return !PlayerGlobalGunManager.PlayerIsAiming;
+        }
+
+        bool PlayerIsNotShooting()
+        {
+            return !PlayerGlobalGunManager.PlayerIsShooting; ;
         }
     }
 

@@ -42,11 +42,11 @@ public class PlayerGunAnimationManager : MonoBehaviour
             {
                 if (PlayerIsMoving())
                 {
-                    if (PlayerIsRunning()) ChangeBlendTreeAnimationParameterValueTo(RunAnimationFloatValue);
+                    if (PlayerIsRunning() && !PlayerGlobalGunManager.PlayerIsAiming) ChangeBlendTreeAnimationParameterValueTo(RunAnimationFloatValue);
                     
                     else ChangeBlendTreeAnimationParameterValueTo(WalkAnimationFloatValue);
                 }
-
+          
                 else ChangeBlendTreeAnimationParameterValueTo(IdleAnimationFloatValue);
             }
 

@@ -75,6 +75,7 @@ public class PlayerGunShootManager : MonoBehaviour
         if (CheckIfPlayerCanShoot() && PlayerIsShooting)
         {
             Shoot();
+            
         }
     }
 
@@ -117,11 +118,13 @@ public class PlayerGunShootManager : MonoBehaviour
     private void PlayerHasStoppedShooting()
     {
         PlayerIsShooting = false;
+        PlayerGlobalGunManager.SetPlayerIsShootingToFalse();
     }
 
     private void PlayerIsPressingShootButton()
     {
         PlayerIsShooting = true;
+        PlayerGlobalGunManager.SetPlayerIsShootingToTrue();
     }
 
     private void ReloadGun()

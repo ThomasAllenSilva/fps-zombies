@@ -32,12 +32,14 @@ public class PlayerGunAimManager : MonoBehaviour
     private void AimWeapon()
     {
         _playerIsHoldingAimWeaponButton = true;
+        PlayerGlobalGunManager.SetPlayerIsAimingToTrue();
         StartCoroutine(MoveWeaponToTheAimPosition());
     }
 
     private void StopAimWeapon()
     {
         _playerIsHoldingAimWeaponButton = false;
+        PlayerGlobalGunManager.SetPlayerIsAimingToFalse();
         StartCoroutine(MoveWeaponToTheDefaultPosition());
     }
 
