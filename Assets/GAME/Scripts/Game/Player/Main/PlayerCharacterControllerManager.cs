@@ -10,7 +10,7 @@ public class PlayerCharacterControllerManager : MonoBehaviour
 
     private bool _playerIsGround;
 
-    private readonly float _playerGravityValue = -9.81f;
+    private readonly float _playerGravityValue = -12f;
 
     private void Awake() => _playerCharacterController = GetComponent<CharacterController>();
 
