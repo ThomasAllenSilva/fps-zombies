@@ -6,8 +6,6 @@ public class PlayerGunAnimationManager : CharacterAnimationController
 {
     [SerializeField] private AnimationClip _reloadGunAnimation;
 
-    [Range(1f, 12f)] [SerializeField] private float _animationsTransitionSpeed = 4f;
-
     private PlayerGunController _playerGunController;
 
     private GunAnimationStates _currentAnimationState = GunAnimationStates.Gun_Draw;
@@ -19,8 +17,6 @@ public class PlayerGunAnimationManager : CharacterAnimationController
     private const float IdleAnimationFloatValue = 2f;
 
     private const float ShootAnimationFloatValue = 3f;
-
-    private const string BlendTreeAnimationParameterName = "CurrentPlayerAnimationStateValue";
 
     private float blendTreeAnimationParameterValue = 2f;
 
@@ -51,9 +47,9 @@ public class PlayerGunAnimationManager : CharacterAnimationController
             return;
         }
 
-        if (!PlayerIsMoving())
+        if (PlayerIsWalking())
         {
-            ChangeBlendTreeAnimationParameterValueTo(IdleAnimationFloatValue);
+            ChangeBlendTreeAnimationParameterValueTo(WalkAnimationFloatValue);
             return;
         }
 
@@ -63,7 +59,7 @@ public class PlayerGunAnimationManager : CharacterAnimationController
             return;
         }
 
-        ChangeBlendTreeAnimationParameterValueTo(WalkAnimationFloatValue);
+        ChangeBlendTreeAnimationParameterValueTo(IdleAnimationFloatValue);
     }
 
     private bool PlayerIsRunning()
@@ -71,9 +67,9 @@ public class PlayerGunAnimationManager : CharacterAnimationController
         return _playerGunController.GetPlayerController().PlayerMovementManager.PlayerIsMovingInFowardDirecion && _playerGunController.GetPlayerController().PlayerMovementManager.PlayerIsRunning;
     }
 
-    private bool PlayerIsMoving()
+    private bool PlayerIsWalking()
     {
-        return _playerGunController.GetPlayerController().PlayerInputsManager.PlayerMovementValue() != Vector2.zero;
+        return _playerGunController.GetPlayerController().PlayerInputsManager.PlayerMovementValue() != Vector2.zero && !_playerGunController.GetPlayerController().PlayerMovementManager.PlayerIsRunning;
     }
 
     private bool PlayerIsShooting()
@@ -88,12 +84,24 @@ public class PlayerGunAnimationManager : CharacterAnimationController
 
     private void ChangeBlendTreeAnimationParameterValueTo(float targetValue)
     {
-        if (blendTreeAnimationParameterValue != targetValue)
+        if (blendTreeAnimationParameterValue == targetValue)
         {
-            if (targetValue == ShootAnimationFloatValue) blendTreeAnimationParameterValue = ShootAnimationFloatValue;
-
-            else blendTreeAnimationParameterValue = Mathf.MoveTowards(blendTreeAnimationParameterValue, targetValue, Time.deltaTime * _animationsTransitionSpeed);
+            ChangeCurrentAnimationState(GunAnimationStates.Gun_BlendTree);
+            return;
         }
+
+        if (targetValue == ShootAnimationFloatValue)
+        {
+            blendTreeAnimationParameterValue = ShootAnimationFloatValue;
+
+            _characterAnimator.SetFloat(BlendTreeAnimationParameterName, blendTreeAnimationParameterValue);
+
+            ChangeCurrentAnimationState(GunAnimationStates.Gun_BlendTree);
+
+            return;
+        }
+
+        blendTreeAnimationParameterValue = Mathf.MoveTowards(blendTreeAnimationParameterValue, targetValue, Time.deltaTime * _animationsTransitionSpeed);
 
         _characterAnimator.SetFloat(BlendTreeAnimationParameterName, blendTreeAnimationParameterValue);
 

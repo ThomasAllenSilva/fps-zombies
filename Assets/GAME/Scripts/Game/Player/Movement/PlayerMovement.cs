@@ -39,12 +39,10 @@ public class PlayerMovement : MonoBehaviour
         if (CheckIfPlayerCanRun())
         {
             _playerController.PlayerCharacterControllerManager.MovePlayerToDirection(directionPlayerShouldMove.normalized * playerRunningSpeed);
+            return;
         }
 
-        else
-        {
-            _playerController.PlayerCharacterControllerManager.MovePlayerToDirection(directionPlayerShouldMove.normalized * playerWalkingSpeed);
-        }
+        _playerController.PlayerCharacterControllerManager.MovePlayerToDirection(directionPlayerShouldMove.normalized * playerWalkingSpeed);
 
         bool CheckIfPlayerCanRun()
         {
