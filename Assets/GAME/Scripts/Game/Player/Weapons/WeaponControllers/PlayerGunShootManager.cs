@@ -32,6 +32,7 @@ public class PlayerGunShootManager : MonoBehaviour
 
     private float _defaultBulletSpreadRangeValue;
 
+    private const string EnemyTag = "Enemy";
     public bool PlayerIsShooting { get; private set; }
 
     public bool PlayerIsReloading { get; private set; }
@@ -75,7 +76,6 @@ public class PlayerGunShootManager : MonoBehaviour
         if (CheckIfPlayerCanShoot() && PlayerIsShooting)
         {
             Shoot();
-            
         }
     }
 
@@ -94,12 +94,23 @@ public class PlayerGunShootManager : MonoBehaviour
 
         if (Physics.RaycastNonAlloc(transform.position, directionBulletRaycastShouldGo, rayHit, maxDistanceTheBulletCanHit, _bulletLayerMask) > 0)
         {
-            //TODO Handle ray collision
+            if (rayHit[0].collider.gameObject.CompareTag(EnemyTag))
+            {
+                Damageable damageable = rayHit[0].collider.gameObject.GetComponent<Damageable>();
+
+                damageable.TakeDamage(_bulletDamage);
+            }
+
+            //TODO Handle Decal
         }
 
-        if(_bulletsLeft > 0) Invoke(nameof(AllowPlayerShootAgain), _shootDelay);
+        if (_bulletsLeft > 0)
+        {
+            Invoke(nameof(AllowPlayerShootAgain), _shootDelay);
+            return;
+        }
 
-        else ReloadGun();   
+        ReloadGun();   
     }
 
     private Vector3 GetRandomBulletSpreadValue()

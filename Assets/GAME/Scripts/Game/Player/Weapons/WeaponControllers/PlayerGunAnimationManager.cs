@@ -2,15 +2,13 @@
 
 [RequireComponent(typeof(PlayerGunController))]
 
-public class PlayerGunAnimationManager : MonoBehaviour
+public class PlayerGunAnimationManager : CharacterAnimationController
 {
     [SerializeField] private AnimationClip _reloadGunAnimation;
 
     [Range(1f, 12f)] [SerializeField] private float _animationsTransitionSpeed = 4f;
 
     private PlayerGunController _playerGunController;
-
-    private Animator _playerGunAnimator;
 
     private GunAnimationStates _currentAnimationState = GunAnimationStates.Gun_Draw;
 
@@ -28,9 +26,9 @@ public class PlayerGunAnimationManager : MonoBehaviour
 
     private bool _canPlayAnimations;
 
-    private void Awake()
+    protected override void Awake()
     {
-        _playerGunAnimator = GetComponent<Animator>();
+        base.Awake();
         _playerGunController = GetComponent<PlayerGunController>();
     }
 
@@ -88,7 +86,7 @@ public class PlayerGunAnimationManager : MonoBehaviour
             else blendTreeAnimationParameterValue = Mathf.MoveTowards(blendTreeAnimationParameterValue, targetValue, Time.deltaTime * _animationsTransitionSpeed);
         }
 
-        _playerGunAnimator.SetFloat(BlendTreeAnimationParameterName, blendTreeAnimationParameterValue);
+        _characterAnimator.SetFloat(BlendTreeAnimationParameterName, blendTreeAnimationParameterValue);
 
         ChangeCurrentAnimationState(GunAnimationStates.Gun_BlendTree);
     }
@@ -102,7 +100,7 @@ public class PlayerGunAnimationManager : MonoBehaviour
     {
         if (animationToPlay == _currentAnimationState) return;
 
-        _playerGunAnimator.Play(animationToPlay.ToString());
+        _characterAnimator.Play(animationToPlay.ToString());
 
         _currentAnimationState = animationToPlay;
     }
