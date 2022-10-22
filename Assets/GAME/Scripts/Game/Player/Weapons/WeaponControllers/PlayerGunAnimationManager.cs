@@ -35,7 +35,7 @@ public class PlayerGunAnimationManager : CharacterAnimationController
             return;
         }
 
-        if (PlayerIsReloading() && !PlayerIsShooting())
+        if (PlayerIsReloading())
         {
             ChangeCurrentAnimationState(GunAnimationStates.Gun_Reload);
             return;

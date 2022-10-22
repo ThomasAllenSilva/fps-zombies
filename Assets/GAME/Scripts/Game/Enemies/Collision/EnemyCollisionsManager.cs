@@ -12,7 +12,7 @@ public class EnemyCollisionsManager : MonoBehaviour
         if (other.gameObject.CompareTag(_playerTag))
         {
             OnTriggeredWithPlayer?.Invoke();
-            other.gameObject.GetComponent<Damageable>();
+            //other.gameObject.GetComponent<Damageable>().TakeDamage(100);
         }
     }
 
