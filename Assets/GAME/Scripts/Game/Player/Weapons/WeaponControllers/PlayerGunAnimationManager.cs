@@ -34,27 +34,36 @@ public class PlayerGunAnimationManager : CharacterAnimationController
 
     private void LateUpdate()
     {
-        if (_canPlayAnimations)
+        if (!_canPlayAnimations)
         {
-            if (!PlayerIsShooting() && !PlayerIsReloading())
-            {
-                if (PlayerIsMoving())
-                {
-                    if (PlayerIsRunning() && !PlayerGlobalGunManager.PlayerIsAiming) ChangeBlendTreeAnimationParameterValueTo(RunAnimationFloatValue);
-                    
-                    else ChangeBlendTreeAnimationParameterValueTo(WalkAnimationFloatValue);
-                }
-          
-                else ChangeBlendTreeAnimationParameterValueTo(IdleAnimationFloatValue);
-            }
-
-            else
-            { 
-                if (!PlayerIsReloading()) ChangeBlendTreeAnimationParameterValueTo(ShootAnimationFloatValue);
-              
-                else ChangeCurrentAnimationState(GunAnimationStates.Gun_Reload);    
-            }
+            return;
         }
+
+        if (PlayerIsReloading() && !PlayerIsShooting())
+        {
+            ChangeCurrentAnimationState(GunAnimationStates.Gun_Reload);
+            return;
+        }
+
+        if (PlayerIsShooting() && !PlayerIsReloading())
+        {
+            ChangeBlendTreeAnimationParameterValueTo(ShootAnimationFloatValue);
+            return;
+        }
+
+        if (!PlayerIsMoving())
+        {
+            ChangeBlendTreeAnimationParameterValueTo(IdleAnimationFloatValue);
+            return;
+        }
+
+        if (PlayerIsRunning() && !PlayerGlobalGunManager.PlayerIsAiming)
+        {
+            ChangeBlendTreeAnimationParameterValueTo(RunAnimationFloatValue);
+            return;
+        }
+
+        ChangeBlendTreeAnimationParameterValueTo(WalkAnimationFloatValue);
     }
 
     private bool PlayerIsRunning()
