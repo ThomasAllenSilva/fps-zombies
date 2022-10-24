@@ -4,13 +4,13 @@
 
 public class PlayerGunAnimationManager : CharacterAnimationController<PlayerGunAnimationManager.GunAnimationStates>
 {
-    [SerializeField] private AnimationClip _reloadGunAnimation;
-
     [Range(1f, 12f)] [SerializeField] private float _animationsTransitionSpeed = 4f;
 
-    private const string BlendTreeAnimationParameterName = "CurrentAnimationStateValue";
+    [SerializeField] private AnimationClip _reloadGunAnimation;
 
     private PlayerGunController _playerGunController;
+
+    private const string BlendTreeAnimationParameterName = "CurrentAnimationStateValue";
 
     private const float RunAnimationFloatValue = 1f;
 
@@ -87,19 +87,16 @@ public class PlayerGunAnimationManager : CharacterAnimationController<PlayerGunA
 
     private void ChangeBlendTreeAnimationParameterValueTo(float targetValue)
     {
+        ChangeCurrentAnimationState(GunAnimationStates.Gun_BlendTree);
+
         if (blendTreeAnimationParameterValue == targetValue)
         {
-            ChangeCurrentAnimationState(GunAnimationStates.Gun_BlendTree);
             return;
         }
 
         if (targetValue == ShootAnimationFloatValue)
         {
-            blendTreeAnimationParameterValue = ShootAnimationFloatValue;
-
-            _characterAnimator.SetFloat(BlendTreeAnimationParameterName, blendTreeAnimationParameterValue);
-
-            ChangeCurrentAnimationState(GunAnimationStates.Gun_BlendTree);
+            _characterAnimator.SetFloat(BlendTreeAnimationParameterName, blendTreeAnimationParameterValue = ShootAnimationFloatValue);
 
             return;
         }
@@ -107,8 +104,6 @@ public class PlayerGunAnimationManager : CharacterAnimationController<PlayerGunA
         blendTreeAnimationParameterValue = Mathf.MoveTowards(blendTreeAnimationParameterValue, targetValue, Time.deltaTime * _animationsTransitionSpeed);
 
         _characterAnimator.SetFloat(BlendTreeAnimationParameterName, blendTreeAnimationParameterValue);
-
-        ChangeCurrentAnimationState(GunAnimationStates.Gun_BlendTree);
     }
 
     private void PlayDrawGunAnimation()

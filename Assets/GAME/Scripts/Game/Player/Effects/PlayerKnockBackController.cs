@@ -11,6 +11,6 @@ public class PlayerKnockBackController : MonoBehaviour, IKnockBack
 
     public void PlayKnockBackEffect(Vector3 knockBackDirection, float knockBackForce, float amountOfTime)
     {
-        StartCoroutine(_playerController.PlayerCharacterControllerManager.MovePlayerTowardsDirectionWhileIsInTime(knockBackForce * knockBackDirection, amountOfTime));
+        StartCoroutine(_playerController.PlayerCharacterControllerManager.MovePlayerTowardsDirectionWhileIsInTime(knockBackDirection * knockBackForce, amountOfTime));
     }
 }

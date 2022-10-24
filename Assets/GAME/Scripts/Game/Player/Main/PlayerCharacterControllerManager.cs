@@ -36,6 +36,8 @@ public class PlayerCharacterControllerManager : MonoBehaviour
 
     public IEnumerator MovePlayerTowardsDirectionWhileIsInTime(Vector3 directionPlayerShouldMove, float amountOfTime)
     {
+        StopAllCoroutines();
+
         float time = 0f;
 
         while(time <= amountOfTime)
@@ -44,7 +46,7 @@ public class PlayerCharacterControllerManager : MonoBehaviour
 
             time += Time.deltaTime;
 
-            yield return null;
+            yield return new WaitForEndOfFrame();
         }
     }
 }

@@ -31,11 +31,11 @@ public class PlayerGunShootManager : MonoBehaviour
 
     private const string EnemyTag = "Enemy";
 
+    private int _bulletsLeft;
+
     private float _gunReloadTime;
 
     private float _defaultBulletSpreadRangeValue;
-
-    private int _bulletsLeft;
 
     private bool _playerIsReadyToShoot = true;
 

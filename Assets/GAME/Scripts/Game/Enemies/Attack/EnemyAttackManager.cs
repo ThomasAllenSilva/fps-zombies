@@ -1,11 +1,12 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EnemyAttackManager : MonoBehaviour
 {
     [SerializeField] private int _hitDamage;
 
     [SerializeField] private float _knockBackForce;
+
+    [SerializeField] private float _knockBackDuration;
 
     private static Damageable _playerDamageable;
 
@@ -40,14 +41,14 @@ public class EnemyAttackManager : MonoBehaviour
         _enemyController.EnemyCollisionsManager.OnPlayerLeftAttackTrigger += DisableAttackBoxCollider;
     }
 
-    public void EnableAttackBoxCollider()
-    {
-        _attackCollider.enabled = true;
-    }
-
     public void DisableAttackBoxCollider()
     {
         _attackCollider.enabled = false;
+    }
+
+    public void EnableAttackBoxCollider()
+    {
+        _attackCollider.enabled = true;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -55,9 +56,7 @@ public class EnemyAttackManager : MonoBehaviour
         if (other.gameObject.CompareTag(_playerTag))
         {
             _playerDamageable.TakeDamage(_hitDamage);
-            _playerKnockBack.PlayKnockBackEffect(transform.forward, _knockBackForce, .3f);
+            _playerKnockBack.PlayKnockBackEffect(transform.forward, _knockBackForce, _knockBackDuration);
         }
-
-        _attackCollider.enabled = false;
     }
 }
