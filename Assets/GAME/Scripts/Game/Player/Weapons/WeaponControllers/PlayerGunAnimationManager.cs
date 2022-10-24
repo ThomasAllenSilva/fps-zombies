@@ -77,7 +77,7 @@ public class PlayerGunAnimationManager : CharacterAnimationController<PlayerGunA
 
     private bool PlayerIsShooting()
     {
-        return _playerGunController.PlayerGunShootManager.PlayerIsShooting;
+        return _playerGunController.PlayerGunShootManager.PlayerIsPressingShootButton;
     }
 
     private bool PlayerIsReloading()

@@ -2,7 +2,7 @@
 {
     public static bool PlayerIsAiming { get; private set; }
 
-    public static bool PlayerIsShooting { get; private set; }
+    public static bool PlayerIsHoldingShootButton { get; private set; }
 
     public static bool PlayerIsReloading { get; private set; }
 
@@ -16,14 +16,14 @@
         PlayerIsAiming = false;
     }
 
-    public static void SetPlayerIsShootingToTrue()
+    public static void SetPlayerIsHoldingShootButtonToTrue()
     {
-        PlayerIsShooting = true;
+        PlayerIsHoldingShootButton = true;
     }
 
-    public static void SetPlayerIsShootingToFalse()
+    public static void SetPlayerIsHoldingShootButtonToFalse()
     {
-        PlayerIsShooting = false;
+        PlayerIsHoldingShootButton = false;
     }
 
     public static void SetPlayerIsReloadingToTrue()

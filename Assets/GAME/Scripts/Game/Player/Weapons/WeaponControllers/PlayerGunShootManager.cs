@@ -7,6 +7,8 @@ public class PlayerGunShootManager : MonoBehaviour
 
     private PlayerGunController _playerGunController;
 
+    private PlayerInputsManager _playerInputsManager;
+
     [SerializeField] private int _bulletDamage;
 
     [SerializeField] private int _gunMagazineSize;
@@ -23,21 +25,21 @@ public class PlayerGunShootManager : MonoBehaviour
 
     [SerializeField] private Transform bulletSpawmPosition;
 
-    private float _gunReloadTime;
-
-    private bool _playerCanShoot = true;
-
-    private int _bulletsLeft;
-
     private Vector3 _randomBulletSpreadRangeValue = new Vector3(0f, 0f, 0f);
 
     private readonly RaycastHit[] rayHit = new RaycastHit[4];
 
-    private float _defaultBulletSpreadRangeValue;
-
     private const string EnemyTag = "Enemy";
 
-    public bool PlayerIsShooting { get; private set; }
+    private float _gunReloadTime;
+
+    private float _defaultBulletSpreadRangeValue;
+
+    private int _bulletsLeft;
+
+    private bool _playerIsReadyToShoot = true;
+
+    public bool PlayerIsPressingShootButton { get; private set; }
 
     public bool PlayerIsReloading { get; private set; }
 
@@ -46,19 +48,21 @@ public class PlayerGunShootManager : MonoBehaviour
         _playerGunController = GetComponent<PlayerGunController>();
 
         _defaultBulletSpreadRangeValue = _bulletSpreadRange;
+
+        _playerInputsManager = _playerGunController.GetPlayerController().PlayerInputsManager;
     }
     
     private void Start()
     {
-        _playerGunController.GetPlayerController().PlayerInputsManager.OnPlayerIsPressingShootButton += PlayerIsPressingShootButton;
+        _playerInputsManager.OnPlayerIsPressingShootButton += PlayerIsHoldingShootButton;
 
-        _playerGunController.GetPlayerController().PlayerInputsManager.OnPlayerStoppedPressingShootButton += PlayerHasStoppedShooting;
+        _playerInputsManager.OnPlayerStoppedPressingShootButton += PlayerHasStoppedHoldingShootButton;
 
-        _playerGunController.GetPlayerController().PlayerInputsManager.OnPlayerPressedReloadButton += ReloadGun;
+        _playerInputsManager.OnPlayerPressedReloadButton += ReloadGun;
 
-        _playerGunController.GetPlayerController().PlayerInputsManager.OnPlayerIsPressingAimButton += ChangeBulletSpreadValueToMorePrecise;
+        _playerInputsManager.OnPlayerIsPressingAimButton += ChangeBulletSpreadValueToMorePrecise;
 
-        _playerGunController.GetPlayerController().PlayerInputsManager.OnPlayerStoppedPressingAimButtom += ChangeBulletSpreadRangeToDefaultValue;
+        _playerInputsManager.OnPlayerStoppedPressingAimButtom += ChangeBulletSpreadRangeToDefaultValue;
 
         _bulletsLeft = _gunMagazineSize;
         
@@ -67,41 +71,53 @@ public class PlayerGunShootManager : MonoBehaviour
 
     private void Update()
     {
-        if (CheckIfPlayerCanShoot() && PlayerIsShooting)
+        if (CheckIfPlayerCanShoot() && PlayerIsPressingShootButton)
         {
             Shoot();
         }
     }
+
     private bool CheckIfPlayerCanShoot()
     {
-        return _playerCanShoot && !PlayerIsReloading && _bulletsLeft > 0;
+        return _playerIsReadyToShoot && !PlayerIsReloading && _bulletsLeft >= _bulletsPerShoot;
     }
 
     private void Shoot()
     {
-        _playerCanShoot = false;
+        _playerIsReadyToShoot = false;
 
         _bulletsLeft -= _bulletsPerShoot;
 
         Vector3 directionBulletRaycastShouldGo = bulletSpawmPosition.forward + GetRandomBulletSpreadValue();
 
-        if (Physics.RaycastNonAlloc(transform.position, directionBulletRaycastShouldGo, rayHit, maxDistanceTheBulletCanHit, _bulletLayerMask) > 0)
+        int amountOfObjectsHittedByShootRayCast = Physics.RaycastNonAlloc(transform.position, directionBulletRaycastShouldGo, rayHit, maxDistanceTheBulletCanHit, _bulletLayerMask);
+
+        if (amountOfObjectsHittedByShootRayCast > 0)
         {
-            for (int i = 0; i < rayHit.Length; i++)
+            for (int i = 0; i < amountOfObjectsHittedByShootRayCast; i++)
             {
-                if (rayHit[i].collider != null && rayHit[i].collider.gameObject.CompareTag(EnemyTag))
+                Collider objectHitted = rayHit[i].collider;
+
+                if(objectHitted == null)
+                {
+                    continue;
+                }
+
+                if (objectHitted.gameObject.CompareTag(EnemyTag))
                 {
                     Damageable damageable = rayHit[i].collider.gameObject.GetComponent<Damageable>();
 
                     damageable.TakeDamage(_bulletDamage);
+
                     break;
-                }
+                }         
             }
         }
 
-        if (_bulletsLeft > 0)
+        if (_bulletsLeft >= _bulletsPerShoot)
         {
-            Invoke(nameof(AllowPlayerShootAgain), _shootDelay);
+            Invoke(nameof(PlayerIsReadyToShootAgain), _shootDelay);
+
             return;
         }
 
@@ -121,27 +137,29 @@ public class PlayerGunShootManager : MonoBehaviour
     private Vector3 GetRandomBulletSpreadValue()
     {
         _randomBulletSpreadRangeValue.x = Random.Range(-_bulletSpreadRange, _bulletSpreadRange);
+
         _randomBulletSpreadRangeValue.y = Random.Range(-_bulletSpreadRange, _bulletSpreadRange);
 
         return _randomBulletSpreadRangeValue;
     }
 
-    private void AllowPlayerShootAgain()
+    private void PlayerIsReadyToShootAgain()
     {
-        _playerCanShoot = true;
+        _playerIsReadyToShoot = true;
     }
 
-    private void PlayerHasStoppedShooting()
+    private void PlayerIsHoldingShootButton()
     {
-        PlayerIsShooting = false;
-        PlayerGlobalGunManager.SetPlayerIsShootingToFalse();
+        PlayerIsPressingShootButton = true;
+
+        PlayerGlobalGunManager.SetPlayerIsHoldingShootButtonToTrue();
     }
 
-    private void PlayerIsPressingShootButton()
+    private void PlayerHasStoppedHoldingShootButton()
     {
-        PlayerIsShooting = true;
+        PlayerIsPressingShootButton = false;
 
-        PlayerGlobalGunManager.SetPlayerIsShootingToTrue();
+        PlayerGlobalGunManager.SetPlayerIsHoldingShootButtonToFalse();
     }
 
     private void ReloadGun()
@@ -164,6 +182,6 @@ public class PlayerGunShootManager : MonoBehaviour
 
         PlayerGlobalGunManager.SetPlayerIsReloadingToFalse();
 
-        AllowPlayerShootAgain();
+        PlayerIsReadyToShootAgain();
     }
 }

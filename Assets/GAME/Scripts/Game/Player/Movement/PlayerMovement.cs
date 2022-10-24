@@ -46,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
 
         bool CheckIfPlayerCanRun()
         {
-            return PlayerIsRunning && PlayerIsMovingInFowardDirecion && !PlayerGlobalGunManager.PlayerIsAiming && !PlayerGlobalGunManager.PlayerIsShooting && !PlayerGlobalGunManager.PlayerIsReloading;
+            return PlayerIsRunning && PlayerIsMovingInFowardDirecion && !PlayerGlobalGunManager.PlayerIsAiming && !PlayerGlobalGunManager.PlayerIsHoldingShootButton && !PlayerGlobalGunManager.PlayerIsReloading;
         }
     }
 
