@@ -7,24 +7,19 @@ public class PlayerGunAimManager : MonoBehaviour
 
     private static Transform _weaponAimPosition;
 
+    private static readonly int _weaponAimPositionChildIndex = 1;
+
     private PlayerGunController _playerGunController;
 
     private Vector3 _weaponDefaultPosition;
 
     private bool _playerIsHoldingAimWeaponButton;
 
-    private void Awake()
-    {
-        _playerGunController = GetComponent<PlayerGunController>();
-
-         if(_weaponAimPosition == null) _weaponAimPosition = transform.parent.GetChild(2).transform;
-    }
+    private void Awake() => _playerGunController = GetComponentInChildren<PlayerGunController>();
 
     private void Start()
     {
-        _playerGunController.GetPlayerController().PlayerInputsManager.OnPlayerIsPressingAimButton += AimWeapon;
-
-        _playerGunController.GetPlayerController().PlayerInputsManager.OnPlayerStoppedPressingAimButtom += StopAimWeapon;
+        _weaponAimPosition = transform.parent.GetChild(_weaponAimPositionChildIndex).transform;
 
         _weaponDefaultPosition = transform.localPosition;
     }
@@ -32,14 +27,18 @@ public class PlayerGunAimManager : MonoBehaviour
     private void AimWeapon()
     {
         _playerIsHoldingAimWeaponButton = true;
+
         PlayerGlobalGunManager.SetPlayerIsAimingToTrue();
+
         StartCoroutine(MoveWeaponToTheAimPosition());
     }
 
     private void StopAimWeapon()
     {
         _playerIsHoldingAimWeaponButton = false;
+
         PlayerGlobalGunManager.SetPlayerIsAimingToFalse();
+
         StartCoroutine(MoveWeaponToTheDefaultPosition());
     }
 
@@ -59,5 +58,19 @@ public class PlayerGunAimManager : MonoBehaviour
             transform.localPosition = Vector3.MoveTowards(transform.localPosition, _weaponDefaultPosition, _weaponAimSpeed * Time.deltaTime);
             yield return null;
         }
+    }
+
+    private void OnEnable()
+    {
+        _playerGunController.GetPlayerController().PlayerInputsManager.OnPlayerIsPressingAimButton += AimWeapon;
+
+        _playerGunController.GetPlayerController().PlayerInputsManager.OnPlayerStoppedPressingAimButtom += StopAimWeapon;
+    }
+
+    private void OnDisable()
+    {
+        _playerGunController.GetPlayerController().PlayerInputsManager.OnPlayerIsPressingAimButton -= AimWeapon;
+
+        _playerGunController.GetPlayerController().PlayerInputsManager.OnPlayerStoppedPressingAimButtom -= StopAimWeapon;
     }
 }

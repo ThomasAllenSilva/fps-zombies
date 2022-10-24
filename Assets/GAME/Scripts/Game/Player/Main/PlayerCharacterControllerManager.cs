@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(CharacterController))]
 
@@ -14,6 +15,7 @@ public class PlayerCharacterControllerManager : MonoBehaviour
 
     private void Awake() => _playerCharacterController = GetComponent<CharacterController>();
 
+   
     private void Update()
     {
         _playerIsGround = _playerCharacterController.isGrounded; 
@@ -27,8 +29,22 @@ public class PlayerCharacterControllerManager : MonoBehaviour
         _playerCharacterController.Move(_playerVelocity * Time.deltaTime);
     }
 
-    public void MovePlayerToDirection(Vector3 directionPlayerShouldMove)
+    public void MovePlayerToDirectionInstantly(Vector3 directionPlayerShouldMove)
     {
         _playerCharacterController.Move(directionPlayerShouldMove * Time.deltaTime);
+    }
+
+    public IEnumerator MovePlayerTowardsDirectionWhileIsInTime(Vector3 directionPlayerShouldMove, float amountOfTime)
+    {
+        float time = 0f;
+
+        while(time <= amountOfTime)
+        {
+            _playerCharacterController.Move(directionPlayerShouldMove * Time.deltaTime);
+
+            time += Time.deltaTime;
+
+            yield return null;
+        }
     }
 }

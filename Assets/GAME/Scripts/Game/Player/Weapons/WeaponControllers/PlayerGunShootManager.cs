@@ -4,6 +4,7 @@
 
 public class PlayerGunShootManager : MonoBehaviour
 {
+
     private PlayerGunController _playerGunController;
 
     [SerializeField] private int _bulletDamage;
@@ -20,6 +21,8 @@ public class PlayerGunShootManager : MonoBehaviour
 
     [SerializeField] private LayerMask _bulletLayerMask;
 
+    [SerializeField] private Transform bulletSpawmPosition;
+
     private float _gunReloadTime;
 
     private bool _playerCanShoot = true;
@@ -28,11 +31,12 @@ public class PlayerGunShootManager : MonoBehaviour
 
     private Vector3 _randomBulletSpreadRangeValue = new Vector3(0f, 0f, 0f);
 
-    private readonly RaycastHit[] rayHit = new RaycastHit[1];
+    private readonly RaycastHit[] rayHit = new RaycastHit[4];
 
     private float _defaultBulletSpreadRangeValue;
 
     private const string EnemyTag = "Enemy";
+
     public bool PlayerIsShooting { get; private set; }
 
     public bool PlayerIsReloading { get; private set; }
@@ -61,16 +65,6 @@ public class PlayerGunShootManager : MonoBehaviour
         _gunReloadTime = _playerGunController.PlayerGunAnimationManager.GetGunReloadAnimationTime();
     }
 
-    private void ChangeBulletSpreadRangeToDefaultValue()
-    {
-        _bulletSpreadRange = _defaultBulletSpreadRangeValue;
-    }
-
-    private void ChangeBulletSpreadValueToMorePrecise()
-    {
-        _bulletSpreadRange *= 0.5f;
-    }
-
     private void Update()
     {
         if (CheckIfPlayerCanShoot() && PlayerIsShooting)
@@ -78,7 +72,6 @@ public class PlayerGunShootManager : MonoBehaviour
             Shoot();
         }
     }
-
     private bool CheckIfPlayerCanShoot()
     {
         return _playerCanShoot && !PlayerIsReloading && _bulletsLeft > 0;
@@ -90,18 +83,20 @@ public class PlayerGunShootManager : MonoBehaviour
 
         _bulletsLeft -= _bulletsPerShoot;
 
-        Vector3 directionBulletRaycastShouldGo = transform.forward + GetRandomBulletSpreadValue();
+        Vector3 directionBulletRaycastShouldGo = bulletSpawmPosition.forward + GetRandomBulletSpreadValue();
 
         if (Physics.RaycastNonAlloc(transform.position, directionBulletRaycastShouldGo, rayHit, maxDistanceTheBulletCanHit, _bulletLayerMask) > 0)
         {
-            if (rayHit[0].collider.gameObject.CompareTag(EnemyTag))
+            for (int i = 0; i < rayHit.Length; i++)
             {
-                Damageable damageable = rayHit[0].collider.gameObject.GetComponent<Damageable>();
+                if (rayHit[i].collider != null && rayHit[i].collider.gameObject.CompareTag(EnemyTag))
+                {
+                    Damageable damageable = rayHit[i].collider.gameObject.GetComponent<Damageable>();
 
-                damageable.TakeDamage(_bulletDamage);
+                    damageable.TakeDamage(_bulletDamage);
+                    break;
+                }
             }
-
-            //TODO Handle Decal
         }
 
         if (_bulletsLeft > 0)
@@ -110,7 +105,17 @@ public class PlayerGunShootManager : MonoBehaviour
             return;
         }
 
-        ReloadGun();   
+        ReloadGun();
+    }
+
+    private void ChangeBulletSpreadRangeToDefaultValue()
+    {
+        _bulletSpreadRange = _defaultBulletSpreadRangeValue;
+    }
+
+    private void ChangeBulletSpreadValueToMorePrecise()
+    {
+        _bulletSpreadRange *= 0.5f;
     }
 
     private Vector3 GetRandomBulletSpreadValue()
@@ -135,6 +140,7 @@ public class PlayerGunShootManager : MonoBehaviour
     private void PlayerIsPressingShootButton()
     {
         PlayerIsShooting = true;
+
         PlayerGlobalGunManager.SetPlayerIsShootingToTrue();
     }
 
@@ -143,7 +149,9 @@ public class PlayerGunShootManager : MonoBehaviour
         if (!PlayerIsReloading && _bulletsLeft < _gunMagazineSize)
         {
             PlayerIsReloading = true;
+
             PlayerGlobalGunManager.SetPlayerIsReloadingToTrue();
+
             Invoke(nameof(ReloadFinished), _gunReloadTime);
         }
     }
@@ -155,6 +163,7 @@ public class PlayerGunShootManager : MonoBehaviour
         PlayerIsReloading = false;
 
         PlayerGlobalGunManager.SetPlayerIsReloadingToFalse();
+
         AllowPlayerShootAgain();
     }
 }

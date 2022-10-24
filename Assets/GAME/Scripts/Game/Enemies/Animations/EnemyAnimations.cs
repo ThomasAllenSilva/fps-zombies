@@ -1,18 +1,45 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class EnemyAnimations : CharacterAnimationController
+﻿
+public class EnemyAnimations : CharacterAnimationController<EnemyAnimations.EnemyAnimationsStates>
 {
-    // Start is called before the first frame update
-    void Start()
+    private EnemyController _enemyController;
+
+    public enum EnemyAnimationsStates { EnemyRun, EnemyDie, EnemyAttack }
+
+    protected override void Awake()
     {
-        
+        base.Awake();
+        _enemyController = GetComponent<EnemyController>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        _enemyController.EnemyCollisionsManager.OnPlayerEnteredAttackTrigger += PlayAttackAnimation;
+        _enemyController.EnemyCollisionsManager.OnPlayerLeftAttackTrigger += PlayRunAnimation;
+        _enemyController.EnemyHealthManager.OnDie += PlayDieAnimation;
+
+        ChangeCurrentAnimationState(EnemyAnimationsStates.EnemyRun);
+    }
+
+    private void PlayDieAnimation()
+    {
+        ChangeCurrentAnimationState(EnemyAnimationsStates.EnemyDie);
+
+        _canPlayAnimations = false;
+    }
+
+    public void DisableAnimator()
+    {
+        _characterAnimator.enabled = false;
+    }
+
+    private void PlayRunAnimation()
+    {
+        if(_canPlayAnimations)
+        ChangeCurrentAnimationState(EnemyAnimationsStates.EnemyRun);
+    }
+
+    private void PlayAttackAnimation()
+    {
+        ChangeCurrentAnimationState(EnemyAnimationsStates.EnemyAttack);
     }
 }

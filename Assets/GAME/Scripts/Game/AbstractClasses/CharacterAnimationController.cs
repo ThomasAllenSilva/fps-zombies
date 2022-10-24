@@ -1,16 +1,25 @@
 ﻿using UnityEngine;
+using System;
 
-public abstract class CharacterAnimationController : MonoBehaviour
+public abstract class CharacterAnimationController<T> : MonoBehaviour where T : Enum
 {
     protected Animator _characterAnimator;
 
-    [Range(1f, 12f)] [SerializeField] protected float _animationsTransitionSpeed = 4f;
+    protected bool _canPlayAnimations = true;
 
+    protected T _currentAnimationState;
 
-    protected static string BlendTreeAnimationParameterName = "CurrentAnimationStateValue";
-
-    protected virtual void Awake()
+    protected virtual void Awake() => _characterAnimator = GetComponent<Animator>();
+    
+    protected void ChangeCurrentAnimationState(T animationToPlay)
     {
-        _characterAnimator = GetComponent<Animator>();
+        if (!_canPlayAnimations && animationToPlay.ToString() == _currentAnimationState.ToString())
+        {
+            return;
+        }
+
+        _characterAnimator.Play(animationToPlay.ToString());
+
+        _currentAnimationState = animationToPlay;
     }
 }

@@ -5,19 +5,31 @@ public class EnemyCollisionsManager : MonoBehaviour
 {
     private static readonly string _playerTag = "Player";
 
-    public event Action OnTriggeredWithPlayer;
+    public event Action OnPlayerEnteredAttackTrigger;
 
-    private void OnTriggerEnter(Collider other)
+    public event Action OnPlayerLeftAttackTrigger;
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (!other.gameObject.CompareTag(_playerTag))
+        {
+            return;
+        }
+
+        OnPlayerEnteredAttackTrigger?.Invoke();
+    }
+
+
+    private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag(_playerTag))
         {
-            OnTriggeredWithPlayer?.Invoke();
-            //other.gameObject.GetComponent<Damageable>().TakeDamage(100);
+            OnPlayerLeftAttackTrigger?.Invoke();
         }
     }
 
     private void OnDestroy()
     {
-        OnTriggeredWithPlayer = delegate { };
+        OnPlayerEnteredAttackTrigger = delegate { };
     }
 }

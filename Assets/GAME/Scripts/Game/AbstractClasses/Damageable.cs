@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 
 public abstract class Damageable : MonoBehaviour
@@ -6,6 +7,8 @@ public abstract class Damageable : MonoBehaviour
     [field: SerializeField] public int MaxHealth { get; private set; }
 
     public int CurrentHealth { get; private set; }
+
+    public event Action OnDie;
 
     protected virtual void Start()
     {
@@ -19,12 +22,10 @@ public abstract class Damageable : MonoBehaviour
         if(CurrentHealth <= 0)
         {
             Die();
+            OnDie?.Invoke();
+            return;
         }
-
     }
 
-    protected virtual void Die()
-    {
-        gameObject.SetActive(false);
-    }
+    protected abstract void Die();
 }

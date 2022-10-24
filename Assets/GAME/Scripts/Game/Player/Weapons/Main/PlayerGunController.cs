@@ -14,7 +14,7 @@ public class PlayerGunController : MonoBehaviour
 
         PlayerGunShootManager = GetComponent<PlayerGunShootManager>();
 
-        _playerController = transform.parent.parent.GetComponent<PlayerController>();
+        _playerController = GetComponentInParent<PlayerController>();
     }
 
     public PlayerController GetPlayerController()

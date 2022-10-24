@@ -2,13 +2,15 @@
 
 [RequireComponent(typeof(PlayerGunController))]
 
-public class PlayerGunAnimationManager : CharacterAnimationController
+public class PlayerGunAnimationManager : CharacterAnimationController<PlayerGunAnimationManager.GunAnimationStates>
 {
     [SerializeField] private AnimationClip _reloadGunAnimation;
 
-    private PlayerGunController _playerGunController;
+    [Range(1f, 12f)] [SerializeField] private float _animationsTransitionSpeed = 4f;
 
-    private GunAnimationStates _currentAnimationState = GunAnimationStates.Gun_Draw;
+    private const string BlendTreeAnimationParameterName = "CurrentAnimationStateValue";
+
+    private PlayerGunController _playerGunController;
 
     private const float RunAnimationFloatValue = 1f;
 
@@ -20,11 +22,12 @@ public class PlayerGunAnimationManager : CharacterAnimationController
 
     private float blendTreeAnimationParameterValue = 2f;
 
-    private bool _canPlayAnimations;
-
     protected override void Awake()
     {
         base.Awake();
+
+        _canPlayAnimations = false;
+
         _playerGunController = GetComponent<PlayerGunController>();
     }
 
@@ -113,15 +116,6 @@ public class PlayerGunAnimationManager : CharacterAnimationController
         ChangeCurrentAnimationState(GunAnimationStates.Gun_Draw);
     }
 
-    private void ChangeCurrentAnimationState(GunAnimationStates animationToPlay)
-    {
-        if (animationToPlay == _currentAnimationState) return;
-
-        _characterAnimator.Play(animationToPlay.ToString());
-
-        _currentAnimationState = animationToPlay;
-    }
-
     public float GetGunReloadAnimationTime()
     {
         return _reloadGunAnimation.length;
@@ -142,7 +136,7 @@ public class PlayerGunAnimationManager : CharacterAnimationController
         _canPlayAnimations = false;
     }
 
-    private enum GunAnimationStates
+    public enum GunAnimationStates
     {
         Gun_Draw,
         Gun_BlendTree,
