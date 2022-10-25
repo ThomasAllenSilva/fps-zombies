@@ -1,52 +1,64 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-[RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(Rigidbody))]
 
 public class PlayerCharacterControllerManager : MonoBehaviour
 {
-    private CharacterController _playerCharacterController;
+    [SerializeField] private LayerMask _playerStepsLayerMask;
 
-    private Vector3 _playerVelocity;
+    [Range(1f, 2f)] [SerializeField] private float _playerHeight = 1.22f;
 
-    private bool _playerIsGround;
+    [Range(0.2f, 0.8f)] [SerializeField] private float _stepOffSet;
 
-    private readonly float _playerGravityValue = -12f;
+    private PlayerKnockBackController _playerKnockBackController;
 
-    private void Awake() => _playerCharacterController = GetComponent<CharacterController>();
+    private Rigidbody _playerRigidbody;
 
-   
-    private void Update()
+    private Vector3 _playerDesiredPosition;
+
+    private const float climbStepSpeed = 4f;
+
+    private void Awake()
     {
-        _playerIsGround = _playerCharacterController.isGrounded; 
+        _playerRigidbody = GetComponent<Rigidbody>();
 
-        if (_playerIsGround && _playerVelocity.y < 0)
-        {
-            _playerVelocity.y = 0f;
-        }
-
-        _playerVelocity.y += _playerGravityValue * Time.deltaTime;
-        _playerCharacterController.Move(_playerVelocity * Time.deltaTime);
+        _playerKnockBackController = GetComponent<PlayerController>().PlayerKnockBackController;
     }
 
-    public void MovePlayerToDirectionInstantly(Vector3 directionPlayerShouldMove)
+    private void FixedUpdate()
     {
-        _playerCharacterController.Move(directionPlayerShouldMove * Time.deltaTime);
+        MovePlayer();
+
+        StepClimb();
     }
 
-    public IEnumerator MovePlayerTowardsDirectionWhileIsInTime(Vector3 directionPlayerShouldMove, float amountOfTime)
+    private void MovePlayer()
     {
-        StopAllCoroutines();
-
-        float time = 0f;
-
-        while(time <= amountOfTime)
+        if (!_playerKnockBackController.IsKnockingBacking)
         {
-            _playerCharacterController.Move(directionPlayerShouldMove * Time.deltaTime);
-
-            time += Time.deltaTime;
-
-            yield return new WaitForEndOfFrame();
+            _playerRigidbody.velocity = _playerDesiredPosition * Time.fixedDeltaTime;
         }
+    }
+
+    private void StepClimb()
+    {
+        if (Physics.SphereCast(transform.position, _stepOffSet, Vector3.down, out RaycastHit hit, 5f , _playerStepsLayerMask))
+        {
+            _playerDesiredPosition.y = hit.point.y + _playerHeight;
+        }
+
+        transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, _playerDesiredPosition.y, transform.position.z), climbStepSpeed * Time.fixedDeltaTime);
+    }
+
+    public void AddForceToPlayer(Vector3 force)
+    {
+        _playerRigidbody.AddForce(force, ForceMode.Impulse);
+    }
+
+    public void ChangePlayerDirection(Vector3 directionPlayerShouldMove)
+    {
+        _playerDesiredPosition.x = directionPlayerShouldMove.x;
+
+        _playerDesiredPosition.z = directionPlayerShouldMove.z;
     }
 }

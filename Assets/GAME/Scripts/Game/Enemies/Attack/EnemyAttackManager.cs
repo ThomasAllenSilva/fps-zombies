@@ -6,8 +6,6 @@ public class EnemyAttackManager : MonoBehaviour
 
     [SerializeField] private float _knockBackForce;
 
-    [SerializeField] private float _knockBackDuration;
-
     private static Damageable _playerDamageable;
 
     private static IKnockBack _playerKnockBack;
@@ -56,7 +54,7 @@ public class EnemyAttackManager : MonoBehaviour
         if (other.gameObject.CompareTag(_playerTag))
         {
             _playerDamageable.TakeDamage(_hitDamage);
-            _playerKnockBack.PlayKnockBackEffect(transform.forward, _knockBackForce, _knockBackDuration);
+            _playerKnockBack.PlayKnockBackEffect(transform.forward, _knockBackForce);
         }
     }
 }

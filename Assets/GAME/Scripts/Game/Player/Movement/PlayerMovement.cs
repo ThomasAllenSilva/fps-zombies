@@ -4,9 +4,9 @@
 
 public class PlayerMovement : MonoBehaviour
 {
-    [Range(3f, 8f)] [SerializeField] private float playerWalkingSpeed = 2f;
+    [Range(200f, 250f)] [SerializeField] private float playerWalkingSpeed = 200f;
 
-    [Range(5f, 12f)] [SerializeField] private float playerRunningSpeed = 4f;
+    [Range(350f, 450f)] [SerializeField] private float playerRunningSpeed = 350f;
 
     private PlayerController _playerController;
 
@@ -38,11 +38,11 @@ public class PlayerMovement : MonoBehaviour
 
         if (CheckIfPlayerCanRun())
         {
-            _playerController.PlayerCharacterControllerManager.MovePlayerToDirectionInstantly(directionPlayerShouldMove.normalized * playerRunningSpeed);
+            _playerController.PlayerCharacterControllerManager.ChangePlayerDirection(directionPlayerShouldMove.normalized * playerRunningSpeed);
             return;
         }
 
-        _playerController.PlayerCharacterControllerManager.MovePlayerToDirectionInstantly(directionPlayerShouldMove.normalized * playerWalkingSpeed);
+        _playerController.PlayerCharacterControllerManager.ChangePlayerDirection(directionPlayerShouldMove.normalized * playerWalkingSpeed);
 
         bool CheckIfPlayerCanRun()
         {
