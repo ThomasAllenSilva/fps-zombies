@@ -9,19 +9,34 @@ public class EnemyCollisionsManager : MonoBehaviour
 
     public event Action OnPlayerLeftAttackTrigger;
 
+    private EnemyHealthManager _enemyHealthManager;
+
+    private void Awake()
+    {
+        _enemyHealthManager = transform.parent.GetComponent<EnemyController>().EnemyHealthManager;
+    }
+
     private void OnTriggerStay(Collider other)
     {
-        if (!other.gameObject.CompareTag(_playerTag))
+        if (!_enemyHealthManager.IsAlive)
         {
             return;
         }
 
-        OnPlayerEnteredAttackTrigger?.Invoke();
+        if (other.gameObject.CompareTag(_playerTag))
+        {
+            OnPlayerEnteredAttackTrigger?.Invoke();
+        }
     }
 
 
     private void OnTriggerExit(Collider other)
     {
+        if (!_enemyHealthManager.IsAlive)
+        {
+            return;
+        }
+
         if (other.gameObject.CompareTag(_playerTag))
         {
             OnPlayerLeftAttackTrigger?.Invoke();

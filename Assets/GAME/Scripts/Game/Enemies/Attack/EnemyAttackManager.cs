@@ -37,6 +37,8 @@ public class EnemyAttackManager : MonoBehaviour
     private void Start()
     {
         _enemyController.EnemyCollisionsManager.OnPlayerLeftAttackTrigger += DisableAttackBoxCollider;
+
+        _enemyController.EnemyHealthManager.OnDie += DisableAttackBoxCollider;
     }
 
     public void DisableAttackBoxCollider()

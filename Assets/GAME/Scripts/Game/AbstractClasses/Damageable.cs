@@ -8,6 +8,8 @@ public abstract class Damageable : MonoBehaviour
 
     public int CurrentHealth { get; private set; }
 
+    public bool IsAlive { get; private set; } = true;
+
     public event Action OnDie;
 
     protected virtual void Start()
@@ -22,6 +24,7 @@ public abstract class Damageable : MonoBehaviour
         if(CurrentHealth <= 0)
         {
             Die();
+            IsAlive = false;
             OnDie?.Invoke();
             return;
         }

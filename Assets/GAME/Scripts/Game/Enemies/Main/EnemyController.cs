@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(NavMeshTargetManager))]
-
 public class EnemyController : MonoBehaviour
 {
     public EnemyCollisionsManager EnemyCollisionsManager { get; private set; }
@@ -10,6 +8,8 @@ public class EnemyController : MonoBehaviour
 
     public EnemyAttackManager EnemyAttackManager { get; private set; }
 
+    private CapsuleCollider _capsuleCollider;
+
     private void Awake()
     {
         EnemyCollisionsManager = GetComponentInChildren<EnemyCollisionsManager>();
@@ -17,15 +17,27 @@ public class EnemyController : MonoBehaviour
         EnemyHealthManager = GetComponent<EnemyHealthManager>();
 
         EnemyAttackManager = GetComponentInChildren<EnemyAttackManager>();
+
+        _capsuleCollider = GetComponent<CapsuleCollider>();
     }
 
-    public void CallAttackFunction()
+    private void Start()
     {
-        EnemyAttackManager.EnableAttackBoxCollider();
+        EnemyHealthManager.OnDie += DisableCapsuleCollider;
     }
 
-    public void CallDisableAttackFunction()
+    private void DisableCapsuleCollider()
     {
-        EnemyAttackManager.DisableAttackBoxCollider();
+        _capsuleCollider.enabled = false;
+    }
+
+    private void EnableCapsuleCollider()
+    {
+        _capsuleCollider.enabled = true;
+    }
+
+    private void OnEnable()
+    {
+        EnableCapsuleCollider();
     }
 }
