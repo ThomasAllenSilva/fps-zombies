@@ -16,6 +16,8 @@ public class PlayerKnockBackController : MonoBehaviour, IKnockBack
     {
         IsKnockingBacking = true;
 
+        knockBackDirection.y = 0;
+        knockBackDirection.x = 0;
         _playerController.PlayerCharacterControllerManager.AddForceToPlayer(knockBackDirection * knockBackForce);
 
         await Task.Delay(500);

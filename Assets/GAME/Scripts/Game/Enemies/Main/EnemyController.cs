@@ -38,6 +38,6 @@ public class EnemyController : MonoBehaviour
 
     private void OnEnable()
     {
-        EnableCapsuleCollider();
+        DisableCapsuleCollider();
     }
 }

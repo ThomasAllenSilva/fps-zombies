@@ -10,6 +10,7 @@ public class ZombieRagdollController : MonoBehaviour
     {
         foreach (Rigidbody rigidbody in rigidbodiesFromRagdoll)
         {
+            rigidbody.detectCollisions = true;
             rigidbody.isKinematic = false;
         }
     }
@@ -19,6 +20,7 @@ public class ZombieRagdollController : MonoBehaviour
         foreach (Rigidbody rigidbody in rigidbodiesFromRagdoll)
         {
             rigidbody.isKinematic = true;
+            rigidbody.detectCollisions = false;
         }
     }
 

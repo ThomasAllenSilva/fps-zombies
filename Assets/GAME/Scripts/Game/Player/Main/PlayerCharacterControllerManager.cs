@@ -52,7 +52,10 @@ public class PlayerCharacterControllerManager : MonoBehaviour
 
     public void AddForceToPlayer(Vector3 force)
     {
+
         _playerRigidbody.AddForce(force, ForceMode.Impulse);
+        
+
     }
 
     public void ChangePlayerDirection(Vector3 directionPlayerShouldMove)
