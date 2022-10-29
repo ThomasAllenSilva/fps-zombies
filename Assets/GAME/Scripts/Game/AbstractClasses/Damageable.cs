@@ -18,7 +18,7 @@ public abstract class Damageable : MonoBehaviour
         CurrentHealth = MaxHealth;
     }
 
-    public void TakeDamage(int damageToTake)
+    public virtual void TakeDamage(int damageToTake)
     {
         CurrentHealth -= damageToTake;
 

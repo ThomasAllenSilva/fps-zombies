@@ -10,6 +10,7 @@ public class EnemyController : MonoBehaviour
 
     private CapsuleCollider _capsuleCollider;
 
+  
     private void Awake()
     {
         EnemyCollisionsManager = GetComponentInChildren<EnemyCollisionsManager>();
@@ -39,5 +40,15 @@ public class EnemyController : MonoBehaviour
     private void OnEnable()
     {
         EnableCapsuleCollider();
+    }
+
+    private void OnBecameInvisible()
+    {
+        gameObject.SetActive(false);
+    }
+
+    private void OnDisable()
+    {
+        
     }
 }

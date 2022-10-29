@@ -25,7 +25,7 @@ public class EnemyAttackManager : MonoBehaviour
 
         if (_playerDamageable == null)
         {
-            _playerDamageable = FindObjectOfType<EnemyHealthManager>();
+            _playerDamageable = FindObjectOfType<PlayerHealthManager>();
         }
 
         if (_playerKnockBack == null)
