@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class EnemyCollisionsManager : MonoBehaviour
@@ -11,6 +12,8 @@ public class EnemyCollisionsManager : MonoBehaviour
 
     private EnemyHealthManager _enemyHealthManager;
 
+    private bool _isAllowedToCheckTrigger = true;
+
     private void Awake()
     {
         _enemyHealthManager = transform.parent.GetComponent<EnemyController>().EnemyHealthManager;
@@ -18,7 +21,7 @@ public class EnemyCollisionsManager : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (!_enemyHealthManager.IsAlive)
+        if (!_enemyHealthManager.IsAlive || !_isAllowedToCheckTrigger)
         {
             return;
         }
@@ -26,9 +29,16 @@ public class EnemyCollisionsManager : MonoBehaviour
         if (other.gameObject.CompareTag(_playerTag))
         {
             OnPlayerEnteredAttackTrigger?.Invoke();
+            _isAllowedToCheckTrigger = false;
+            AllowCheckTriggerAgain();
         }
     }
 
+    private async void AllowCheckTriggerAgain()
+    {
+        await Task.Delay(500);
+        _isAllowedToCheckTrigger = true;
+    }
 
     private void OnTriggerExit(Collider other)
     {

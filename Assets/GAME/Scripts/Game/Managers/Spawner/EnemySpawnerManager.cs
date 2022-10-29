@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -18,20 +17,15 @@ public class EnemySpawnerManager : MonoBehaviour
 
     private IEnumerator SpawnEnemies()
     {
-        TypesOfEnemies randomEnemy = (TypesOfEnemies)Random.Range(0, 3);
-
-
         yield return new WaitForSecondsRealtime(spawnDelay);
 
-        while (randomEnemy != TypesOfEnemies.enemyTypeThree)
+        while (true)
         {
-         
-      
+            TypesOfEnemies randomEnemy = (TypesOfEnemies)Random.Range(0, 3);
+
             if (currentAmountOfEnemiesInGame < maxEnemiesInGame)
             {
-               
-
-                bool spawnedSuccessfully = ObjectsPoolerManager.Instance.SpawnObjectFromPool("EnemyTypeOne", transform.position, transform.rotation);
+                bool spawnedSuccessfully = ObjectsPoolerManager.Instance.SpawnObjectFromPool(randomEnemy.ToString(), transform.position, transform.rotation);
 
                 if (spawnedSuccessfully)
                 {
@@ -40,18 +34,15 @@ public class EnemySpawnerManager : MonoBehaviour
             }
 
             yield return new WaitForSecondsRealtime(spawnDelay);
-
         }
-
-        Application.Quit();
     }
 
     private enum TypesOfEnemies 
     {
-        enemyTypeOne = 587194,
+        EnemyTypeOne,
 
-        enemyTypeTwo = 2,
+        EnemyTypeTwo,
 
-        enemyTypeThree = 3
+        EnemyTypeThree
     }
 }
