@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 
 [RequireComponent(typeof(PlayerGunController))]
 
@@ -11,7 +12,9 @@ public class PlayerGunShootManager : MonoBehaviour
 
     [SerializeField] private int _bulletDamage;
 
-    [SerializeField] private int _gunMagazineSize;
+    [field: SerializeField] public int GunMagazineSize { get; private set; }
+
+    [field: SerializeField] public int MaxBullets { get; private set; }
 
     [SerializeField] private int _bulletsPerShoot;
 
@@ -31,7 +34,7 @@ public class PlayerGunShootManager : MonoBehaviour
 
     private const string EnemyTag = "Enemy";
 
-    private int _bulletsLeft;
+    public int BulletsLeft { get; private set; }
 
     private float _gunReloadTime;
 
@@ -42,6 +45,12 @@ public class PlayerGunShootManager : MonoBehaviour
     public bool PlayerIsPressingShootButton { get; private set; }
 
     public bool PlayerIsReloading { get; private set; }
+
+    public static event Action OnPlayerStartedReloading;
+
+    public static event Action OnPlayerFinishedReloading;
+
+    public static event Action OnPlayerIsShooting;
 
     private void Awake()
     {
@@ -64,7 +73,7 @@ public class PlayerGunShootManager : MonoBehaviour
 
         _playerInputsManager.OnPlayerStoppedPressingAimButtom += ChangeBulletSpreadRangeToDefaultValue;
 
-        _bulletsLeft = _gunMagazineSize;
+        BulletsLeft = GunMagazineSize;
         
         _gunReloadTime = _playerGunController.PlayerGunAnimationManager.GetGunReloadAnimationTime();
     }
@@ -74,19 +83,20 @@ public class PlayerGunShootManager : MonoBehaviour
         if (CheckIfPlayerCanShoot() && PlayerIsPressingShootButton)
         {
             Shoot();
+            OnPlayerIsShooting?.Invoke();
         }
     }
 
     private bool CheckIfPlayerCanShoot()
     {
-        return _playerIsReadyToShoot && !PlayerIsReloading && _bulletsLeft >= _bulletsPerShoot;
+        return _playerIsReadyToShoot && !PlayerIsReloading && BulletsLeft >= _bulletsPerShoot;
     }
 
     private void Shoot()
     {
         _playerIsReadyToShoot = false;
 
-        _bulletsLeft -= _bulletsPerShoot;
+        BulletsLeft -= _bulletsPerShoot;
 
         Vector3 directionBulletRaycastShouldGo = bulletSpawmPosition.forward + GetRandomBulletSpreadValue();
 
@@ -114,7 +124,7 @@ public class PlayerGunShootManager : MonoBehaviour
             }
         }
 
-        if (_bulletsLeft >= _bulletsPerShoot)
+        if (BulletsLeft >= _bulletsPerShoot)
         {
             Invoke(nameof(PlayerIsReadyToShootAgain), _shootDelay);
 
@@ -136,9 +146,9 @@ public class PlayerGunShootManager : MonoBehaviour
 
     private Vector3 GetRandomBulletSpreadValue()
     {
-        _randomBulletSpreadRangeValue.x = Random.Range(-_bulletSpreadRange, _bulletSpreadRange);
+        _randomBulletSpreadRangeValue.x = UnityEngine.Random.Range(-_bulletSpreadRange, _bulletSpreadRange);
 
-        _randomBulletSpreadRangeValue.y = Random.Range(-_bulletSpreadRange, _bulletSpreadRange);
+        _randomBulletSpreadRangeValue.y = UnityEngine.Random.Range(-_bulletSpreadRange, _bulletSpreadRange);
 
         return _randomBulletSpreadRangeValue;
     }
@@ -164,11 +174,13 @@ public class PlayerGunShootManager : MonoBehaviour
 
     private void ReloadGun()
     {
-        if (!PlayerIsReloading && _bulletsLeft < _gunMagazineSize)
+        if (!PlayerIsReloading && BulletsLeft < GunMagazineSize)
         {
             PlayerIsReloading = true;
 
             PlayerGlobalGunManager.SetPlayerIsReloadingToTrue();
+
+            OnPlayerStartedReloading?.Invoke();
 
             Invoke(nameof(ReloadFinished), _gunReloadTime);
         }
@@ -176,12 +188,23 @@ public class PlayerGunShootManager : MonoBehaviour
 
     private void ReloadFinished()
     {
-        _bulletsLeft = _gunMagazineSize;
+        MaxBullets -= GunMagazineSize - BulletsLeft;
+
+        BulletsLeft = GunMagazineSize;
+
+        OnPlayerFinishedReloading?.Invoke();
 
         PlayerIsReloading = false;
 
         PlayerGlobalGunManager.SetPlayerIsReloadingToFalse();
 
+        OnPlayerFinishedReloading?.Invoke();
+
         PlayerIsReadyToShootAgain();
+    }
+
+    private void OnEnable()
+    {
+        PlayerGlobalGunManager.ChangeCurrentActiveGun(this);
     }
 }

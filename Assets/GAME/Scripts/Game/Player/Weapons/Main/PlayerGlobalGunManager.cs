@@ -1,10 +1,16 @@
-﻿public static class PlayerGlobalGunManager
+﻿using System;
+
+public static class PlayerGlobalGunManager
 {
     public static bool PlayerIsAiming { get; private set; }
 
     public static bool PlayerIsHoldingShootButton { get; private set; }
 
     public static bool PlayerIsReloading { get; private set; }
+
+    public static PlayerGunShootManager CurrentActiveGun { get; private set; }
+
+    public static event Action OnChangedWeapon;
 
     public static void SetPlayerIsAimingToTrue()
     {
@@ -34,5 +40,11 @@
     public static void SetPlayerIsReloadingToFalse()
     {
         PlayerIsReloading = false;
+    }
+
+    public static void ChangeCurrentActiveGun(PlayerGunShootManager gunToSetActive)
+    {
+        CurrentActiveGun = gunToSetActive;
+        OnChangedWeapon?.Invoke();
     }
 }
