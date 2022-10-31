@@ -136,6 +136,13 @@ public class PlayerGunAnimationManager : CharacterAnimationController<PlayerGunA
         Gun_Draw,
         Gun_BlendTree,
         Gun_Reload,
+        Gun_Hide,
         Gun_Inspect
+    }
+
+    public void PlayHideGunAnimation()
+    {
+        _canPlayAnimations = false;
+        ChangeCurrentAnimationState(GunAnimationStates.Gun_Hide);
     }
 }
