@@ -13,7 +13,7 @@ public abstract class CharacterAnimationController<T> : MonoBehaviour where T : 
     
     protected void ChangeCurrentAnimationState(T animationToPlay)
     {
-        if (!_canPlayAnimations && animationToPlay.ToString() == _currentAnimationState.ToString())
+        if (animationToPlay.ToString() == _currentAnimationState.ToString())
         {
             return;
         }

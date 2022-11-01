@@ -1,44 +1,55 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
-using System;
 
 public class PlayerGunChangeManager : MonoBehaviour
 {
-    private PlayerGunController[] _handGuns;
-
     private PlayerInputsManager _playerInputsManager;
 
-    private List<PlayerGunController> currentGunsInSlot = new List<PlayerGunController>(); 
+    private PlayerGunController[] currentGunsInSlot = new PlayerGunController[6];
+
+    private int currentActiveGunSlotIndex;
 
     private void Awake()
     {
-        _handGuns = GetComponentsInChildren<PlayerGunController>();
+        currentGunsInSlot = GetComponentsInChildren<PlayerGunController>();
 
         _playerInputsManager = GetComponentInParent<PlayerInputsManager>();
 
-        _playerInputsManager.OnPlayerChangedWeaponSlotToOne += ChangeCurrentActiveGunToSlotOne;
+        _playerInputsManager.OnPlayerChangedWeaponSlotToZero += ChangeCurrentActiveGunToSlotZero;
 
-        _playerInputsManager.OnPlayerChangedWeaponSlotToTwo += ChangeCurrentActiveGunToSlotTwo;
+        _playerInputsManager.OnPlayerChangedWeaponSlotToOne += ChangeCurrentActiveGunToSlotOne;
     }
+
+    private void ChangeCurrentActiveGunToSlotZero()
+    {
+        if (currentActiveGunSlotIndex != 0)
+        {
+            currentGunsInSlot[currentActiveGunSlotIndex].DeactivateThisWeapon();
+        }
+       
+        currentActiveGunSlotIndex = 0;
+
+
+    }
+
     private void ChangeCurrentActiveGunToSlotOne()
     {
-        currentGunsInSlot[0].DeactivateThisWeapon();
+        if (currentActiveGunSlotIndex != 1)
+        {
+            currentGunsInSlot[currentActiveGunSlotIndex].DeactivateThisWeapon();
+        }
+
+        currentActiveGunSlotIndex = 1;
+
+
     }
 
-    private void ChangeCurrentActiveGunToSlotTwo()
+    public void AddGunToSlot(int slot, PlayerGunController gunToAdd)
     {
-       
+        currentGunsInSlot[slot] = gunToAdd;
     }
 
-  
-
-    public void AddGunToCurrentGunsInSlot(PlayerGunController gunToAdd)
+    public void ChangeCurrentActiveWeapon()
     {
-        currentGunsInSlot.Add(gunToAdd);
-    }
-
-    public void RemoveGunFromCurrentGunsInSlot(PlayerGunController gunToRemove)
-    {
-        currentGunsInSlot.Remove(gunToRemove);
+        currentGunsInSlot[currentActiveGunSlotIndex].gameObject.transform.parent.gameObject.SetActive(true);
     }
 }

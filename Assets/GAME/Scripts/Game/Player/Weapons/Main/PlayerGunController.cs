@@ -19,13 +19,11 @@ public class PlayerGunController : MonoBehaviour
         _playerController = GetComponentInParent<PlayerController>();
 
         _playerGunChangeManager = transform.parent.parent.GetComponent<PlayerGunChangeManager>();
-
-     
     }
 
     private void Start()
     {
-        _playerGunChangeManager.AddGunToCurrentGunsInSlot(this);
+        _playerGunChangeManager.AddGunToSlot(transform.GetSiblingIndex(), this);
     }
 
     public PlayerController GetPlayerController()
@@ -38,9 +36,8 @@ public class PlayerGunController : MonoBehaviour
         PlayerGunAnimationManager.PlayHideGunAnimation();
     }
 
-    private void OnEnable()
+    private void OnDisable()
     {
-
-
+        _playerGunChangeManager.ChangeCurrentActiveWeapon();
     }
 }

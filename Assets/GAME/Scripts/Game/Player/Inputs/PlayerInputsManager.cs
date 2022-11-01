@@ -16,8 +16,8 @@ public class PlayerInputsManager : MonoBehaviour
     public event Action OnPlayerIsPressingAimButton;
     public event Action OnPlayerStoppedPressingAimButtom;
 
+    public event Action OnPlayerChangedWeaponSlotToZero;
     public event Action OnPlayerChangedWeaponSlotToOne;
-    public event Action OnPlayerChangedWeaponSlotToTwo;
 
     private void Awake()
     {
@@ -34,8 +34,8 @@ public class PlayerInputsManager : MonoBehaviour
         _playerInputActions.PlayerMovementController.RunButton.performed += _ => OnPlayerIsPressingRunButton?.Invoke();
         _playerInputActions.PlayerMovementController.RunButton.canceled += _ => OnPlayerStoppedPressingRunButton?.Invoke();
 
-        _playerInputActions.PlayerWeaponsController.WeaponSlotOne.performed += _ => OnPlayerChangedWeaponSlotToOne?.Invoke();
-        _playerInputActions.PlayerWeaponsController.WeaponSlotTwo.performed += _ => OnPlayerChangedWeaponSlotToTwo?.Invoke();
+        _playerInputActions.PlayerWeaponsController.WeaponSlotOne.performed += _ => OnPlayerChangedWeaponSlotToZero?.Invoke();
+        _playerInputActions.PlayerWeaponsController.WeaponSlotTwo.performed += _ => OnPlayerChangedWeaponSlotToOne?.Invoke();
     }
 
     public Vector2 PlayerMovementValue()
