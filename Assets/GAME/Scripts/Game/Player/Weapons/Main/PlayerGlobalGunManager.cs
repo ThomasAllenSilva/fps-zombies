@@ -4,7 +4,7 @@ public static class PlayerGlobalGunManager
 {
     public static bool PlayerIsAiming { get; private set; }
 
-    public static bool PlayerIsHoldingShootButton { get; private set; }
+    public static bool PlayerIsShooting { get; private set; }
 
     public static bool PlayerIsReloading { get; private set; }
 
@@ -22,14 +22,14 @@ public static class PlayerGlobalGunManager
         PlayerIsAiming = false;
     }
 
-    public static void SetPlayerIsHoldingShootButtonToTrue()
+    public static void SetPlayerIsShootingButtonToTrue()
     {
-        PlayerIsHoldingShootButton = true;
+        PlayerIsShooting = true;
     }
 
-    public static void SetPlayerIsHoldingShootButtonToFalse()
+    public static void SetPlayerIsShootingButtonToFalse()
     {
-        PlayerIsHoldingShootButton = false;
+        PlayerIsShooting = false;
     }
 
     public static void SetPlayerIsReloadingToTrue()

@@ -44,6 +44,8 @@ public class PlayerGunShootManager : MonoBehaviour
 
     public bool PlayerIsPressingShootButton { get; private set; }
 
+    public bool PlayerIsShooting { get; private set; }
+
     public bool PlayerIsReloading { get; private set; }
 
     public static event Action OnPlayerStartedReloading;
@@ -56,9 +58,13 @@ public class PlayerGunShootManager : MonoBehaviour
     {
         _playerGunController = GetComponent<PlayerGunController>();
 
+        _playerInputsManager = _playerGunController.GetPlayerController().PlayerInputsManager;
+
         _defaultBulletSpreadRangeValue = _bulletSpreadRange;
 
-        _playerInputsManager = _playerGunController.GetPlayerController().PlayerInputsManager;
+        BulletsLeft = GunMagazineSize;
+
+        _gunReloadTime = _playerGunController.PlayerGunAnimationManager.GetGunReloadAnimationTime();
     }
     
     private void Start()
@@ -73,20 +79,23 @@ public class PlayerGunShootManager : MonoBehaviour
 
         _playerInputsManager.OnPlayerStoppedPressingAimButtom += ChangeBulletSpreadRangeToDefaultValue;
 
-        BulletsLeft = GunMagazineSize;
-        
-        _gunReloadTime = _playerGunController.PlayerGunAnimationManager.GetGunReloadAnimationTime();
     }
 
     private void Update()
     {
         if (CheckIfPlayerCanShoot() && PlayerIsPressingShootButton)
         {
-            Shoot();
+            Shoot();      
+
+     
+
             OnPlayerIsShooting?.Invoke();
+
+            return;
         }
     }
 
+   
     private bool CheckIfPlayerCanShoot()
     {
         return _playerIsReadyToShoot && !PlayerIsReloading && BulletsLeft >= _bulletsPerShoot;
@@ -94,6 +103,10 @@ public class PlayerGunShootManager : MonoBehaviour
 
     private void Shoot()
     {
+        PlayerIsShooting = true;
+
+        PlayerGlobalGunManager.SetPlayerIsShootingButtonToTrue();
+
         _playerIsReadyToShoot = false;
 
         BulletsLeft -= _bulletsPerShoot;
@@ -115,7 +128,7 @@ public class PlayerGunShootManager : MonoBehaviour
 
                 if (objectHitted.gameObject.CompareTag(EnemyTag))
                 {
-                    Damageable damageable = rayHit[i].collider.gameObject.GetComponent<Damageable>();
+                    Damageable damageable = objectHitted.gameObject.GetComponent<Damageable>();
 
                     damageable.TakeDamage(_bulletDamage);
 
@@ -130,6 +143,10 @@ public class PlayerGunShootManager : MonoBehaviour
 
             return;
         }
+
+        PlayerIsShooting = false;
+
+        PlayerGlobalGunManager.SetPlayerIsShootingButtonToFalse();
 
         ReloadGun();
     }
@@ -162,19 +179,20 @@ public class PlayerGunShootManager : MonoBehaviour
     {
         PlayerIsPressingShootButton = true;
 
-        PlayerGlobalGunManager.SetPlayerIsHoldingShootButtonToTrue();
     }
 
     private void PlayerHasStoppedHoldingShootButton()
     {
         PlayerIsPressingShootButton = false;
 
-        PlayerGlobalGunManager.SetPlayerIsHoldingShootButtonToFalse();
+        PlayerIsShooting = false;
+
+        PlayerGlobalGunManager.SetPlayerIsShootingButtonToFalse();
     }
 
     private void ReloadGun()
     {
-        if (!PlayerIsReloading && BulletsLeft < GunMagazineSize)
+        if (!PlayerIsReloading && BulletsLeft < GunMagazineSize && MaxBullets > 0)
         {
             PlayerIsReloading = true;
 
@@ -188,15 +206,23 @@ public class PlayerGunShootManager : MonoBehaviour
 
     private void ReloadFinished()
     {
-        MaxBullets -= GunMagazineSize - BulletsLeft;
-
-        BulletsLeft = GunMagazineSize;
-
-        OnPlayerFinishedReloading?.Invoke();
-
         PlayerIsReloading = false;
 
+        
+
         PlayerGlobalGunManager.SetPlayerIsReloadingToFalse();
+
+        if((MaxBullets >= GunMagazineSize))
+        {
+            MaxBullets -= GunMagazineSize - BulletsLeft;
+            BulletsLeft = GunMagazineSize;
+        }
+
+        else
+        {
+            BulletsLeft = MaxBullets;
+            MaxBullets = 0;
+        }
 
         OnPlayerFinishedReloading?.Invoke();
 

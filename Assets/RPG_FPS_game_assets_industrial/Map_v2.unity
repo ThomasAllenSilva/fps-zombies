@@ -40016,8 +40016,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bulletDamage: 2
-  <GunMagazineSize>k__BackingField: 50
-  <MaxBullets>k__BackingField: 360
+  <GunMagazineSize>k__BackingField: 10
+  <MaxBullets>k__BackingField: 5
   _bulletsPerShoot: 1
   _shootDelay: 0.05
   _bulletSpreadRange: 0.2

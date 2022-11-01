@@ -17,12 +17,20 @@ public class PlayerGunChangeManager : MonoBehaviour
         _playerInputsManager = GetComponentInParent<PlayerInputsManager>();
 
         _playerInputsManager.OnPlayerChangedWeaponSlotToOne += ChangeCurrentActiveGunToSlotOne;
-    }
 
+        _playerInputsManager.OnPlayerChangedWeaponSlotToTwo += ChangeCurrentActiveGunToSlotTwo;
+    }
     private void ChangeCurrentActiveGunToSlotOne()
     {
         currentGunsInSlot[0].DeactivateThisWeapon();
     }
+
+    private void ChangeCurrentActiveGunToSlotTwo()
+    {
+       
+    }
+
+  
 
     public void AddGunToCurrentGunsInSlot(PlayerGunController gunToAdd)
     {

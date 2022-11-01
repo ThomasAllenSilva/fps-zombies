@@ -25,7 +25,7 @@ public class WeaponUIManager : MonoBehaviour
 
         PlayerGlobalGunManager.OnChangedWeapon += UpdateAllValues;
 
-        UpdateMagazineAmmo();
+        UpdateAllValues();
     }
 
     private void ResetCurrentAmmoText()
@@ -41,7 +41,6 @@ public class WeaponUIManager : MonoBehaviour
     private void UpdateMagazineAmmo()
     {
         magazineAmmoText.text = PlayerGlobalGunManager.CurrentActiveGun.MaxBullets.ToString();
-
     }
 
     private void UpdateCurrentAmmoText()
