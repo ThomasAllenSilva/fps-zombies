@@ -39005,7 +39005,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e09198a50d654a240b26e82e7d0c2c43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _delayToChangeWeapon: 0.2
+  _delayToChangeWeapon: 0.4
 --- !u!1 &1016986885
 GameObject:
   m_ObjectHideFlags: 0

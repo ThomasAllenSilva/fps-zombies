@@ -2,6 +2,7 @@
 
 public class PlayerGunChangeManager : MonoBehaviour
 {
+    [Min(0.4f)]
     [SerializeField] private float _delayToChangeWeapon;
 
     private PlayerInputsManager _playerInputsManager;
