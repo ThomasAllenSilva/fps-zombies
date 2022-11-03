@@ -208,8 +208,6 @@ public class PlayerGunShootManager : MonoBehaviour
     {
         PlayerIsReloading = false;
 
-        
-
         PlayerGlobalGunManager.SetPlayerIsReloadingToFalse();
 
         if((MaxBullets >= GunMagazineSize))

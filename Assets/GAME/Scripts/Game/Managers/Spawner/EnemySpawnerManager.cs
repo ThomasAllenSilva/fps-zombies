@@ -25,7 +25,7 @@ public class EnemySpawnerManager : MonoBehaviour
 
             if (currentAmountOfEnemiesInGame < maxEnemiesInGame)
             {
-                bool spawnedSuccessfully = ObjectsPoolerManager.Instance.SpawnObjectFromPool(randomEnemy.ToString(), transform.position, transform.rotation);
+                bool spawnedSuccessfully = ObjectsPoolerManager.Instance.SpawnObjectFromPool(randomEnemy.ToString(), transform.TransformPoint(transform.localPosition), transform.rotation);
 
                 if (spawnedSuccessfully)
                 {

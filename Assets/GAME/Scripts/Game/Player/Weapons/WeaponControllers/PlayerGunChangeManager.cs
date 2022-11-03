@@ -2,54 +2,84 @@
 
 public class PlayerGunChangeManager : MonoBehaviour
 {
+    [SerializeField] private float _delayToChangeWeapon;
+
     private PlayerInputsManager _playerInputsManager;
 
-    private PlayerGunController[] currentGunsInSlot = new PlayerGunController[6];
+    private PlayerGunController[] _currentGunsInSlot = new PlayerGunController[6];
 
-    private int currentActiveGunSlotIndex;
+    private int _currentActiveGunSlotIndex;
+
+    private bool _canChangeWeapon = true;
 
     private void Awake()
     {
-        currentGunsInSlot = GetComponentsInChildren<PlayerGunController>();
+        _currentGunsInSlot = GetComponentsInChildren<PlayerGunController>(true);
 
         _playerInputsManager = GetComponentInParent<PlayerInputsManager>();
 
         _playerInputsManager.OnPlayerChangedWeaponSlotToZero += ChangeCurrentActiveGunToSlotZero;
 
         _playerInputsManager.OnPlayerChangedWeaponSlotToOne += ChangeCurrentActiveGunToSlotOne;
+
+        foreach (PlayerGunController gun in _currentGunsInSlot)
+        {
+            AddGunToSlot(gun.transform.parent.GetSiblingIndex(), gun);
+        }
+    }
+
+    private void Start()
+    {
+
     }
 
     private void ChangeCurrentActiveGunToSlotZero()
     {
-        if (currentActiveGunSlotIndex != 0)
+        if (!_canChangeWeapon || _currentActiveGunSlotIndex == 0)
         {
-            currentGunsInSlot[currentActiveGunSlotIndex].DeactivateThisWeapon();
+            return;
         }
-       
-        currentActiveGunSlotIndex = 0;
 
+        _canChangeWeapon = false;
+        _currentGunsInSlot[_currentActiveGunSlotIndex].DeactivateThisWeapon();
 
+        _currentActiveGunSlotIndex = 0;
+
+        ChangeCurrentActiveWeapon();
+
+        Invoke(nameof(AllowPlayerChangeWeaponAgain), _delayToChangeWeapon);
     }
 
     private void ChangeCurrentActiveGunToSlotOne()
     {
-        if (currentActiveGunSlotIndex != 1)
+        if (!_canChangeWeapon || _currentActiveGunSlotIndex == 1)
         {
-            currentGunsInSlot[currentActiveGunSlotIndex].DeactivateThisWeapon();
+            return;
         }
 
-        currentActiveGunSlotIndex = 1;
+        _canChangeWeapon = false;
+        _currentGunsInSlot[_currentActiveGunSlotIndex].DeactivateThisWeapon();
 
+        _currentActiveGunSlotIndex = 1;
 
+        ChangeCurrentActiveWeapon();
+
+        Invoke(nameof(AllowPlayerChangeWeaponAgain), _delayToChangeWeapon);
     }
 
     public void AddGunToSlot(int slot, PlayerGunController gunToAdd)
     {
-        currentGunsInSlot[slot] = gunToAdd;
+        _currentGunsInSlot[slot] = gunToAdd;
     }
 
     public void ChangeCurrentActiveWeapon()
     {
-        currentGunsInSlot[currentActiveGunSlotIndex].gameObject.transform.parent.gameObject.SetActive(true);
+        _currentGunsInSlot[_currentActiveGunSlotIndex].gameObject.transform.parent.gameObject.SetActive(true);
+        _currentGunsInSlot[_currentActiveGunSlotIndex].ActivateThisWeapon();
+    }
+
+    private void AllowPlayerChangeWeaponAgain()
+    {
+        _canChangeWeapon = true;
     }
 }

@@ -21,23 +21,18 @@ public class PlayerGunController : MonoBehaviour
         _playerGunChangeManager = transform.parent.parent.GetComponent<PlayerGunChangeManager>();
     }
 
-    private void Start()
-    {
-        _playerGunChangeManager.AddGunToSlot(transform.GetSiblingIndex(), this);
-    }
-
     public PlayerController GetPlayerController()
     {
         return _playerController;
-    }   
+    }
 
     public void DeactivateThisWeapon()
     {
         PlayerGunAnimationManager.PlayHideGunAnimation();
     }
 
-    private void OnDisable()
+    public void ActivateThisWeapon()
     {
-        _playerGunChangeManager.ChangeCurrentActiveWeapon();
+        PlayerGunAnimationManager.PlayDrawGunAnimation();
     }
 }

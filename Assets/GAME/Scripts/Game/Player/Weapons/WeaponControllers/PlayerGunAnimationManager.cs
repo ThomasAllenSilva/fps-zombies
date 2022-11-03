@@ -106,7 +106,7 @@ public class PlayerGunAnimationManager : CharacterAnimationController<PlayerGunA
         _characterAnimator.SetFloat(BlendTreeAnimationParameterName, blendTreeAnimationParameterValue);
     }
 
-    private void PlayDrawGunAnimation()
+    public void PlayDrawGunAnimation()
     {
         ChangeCurrentAnimationState(GunAnimationStates.Gun_Draw);
     }
