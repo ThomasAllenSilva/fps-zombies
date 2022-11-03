@@ -8,6 +8,8 @@ public static class PlayerGlobalGunManager
 
     public static bool PlayerIsReloading { get; private set; }
 
+    
+
     public static PlayerGunShootManager CurrentActiveGun { get; private set; }
 
     public static event Action OnChangedWeapon;
@@ -41,6 +43,8 @@ public static class PlayerGlobalGunManager
     {
         PlayerIsReloading = false;
     }
+
+  
 
     public static void ChangeCurrentActiveGun(PlayerGunShootManager gunToSetActive)
     {

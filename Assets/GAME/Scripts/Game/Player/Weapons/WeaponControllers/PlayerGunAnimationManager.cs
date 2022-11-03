@@ -118,7 +118,9 @@ public class PlayerGunAnimationManager : CharacterAnimationController<PlayerGunA
 
     public void AllowPlayAnimations()
     {
+        ChangeBlendTreeAnimationParameterValueTo(IdleAnimationFloatValue);
         _canPlayAnimations = true;
+        _playerGunController.SetPlayerIsHidingWeaponToFalse();
     }
 
     private void OnEnable()

@@ -4,7 +4,7 @@ public class PlayerGunController : MonoBehaviour
 {
     private static PlayerController _playerController;
 
-    private static PlayerGunChangeManager _playerGunChangeManager;
+    public bool PlayerIsHidingWeapon { get; private set; }
 
     public PlayerGunAnimationManager PlayerGunAnimationManager { get; private set; }
 
@@ -17,8 +17,6 @@ public class PlayerGunController : MonoBehaviour
         PlayerGunShootManager = GetComponent<PlayerGunShootManager>();
 
         _playerController = GetComponentInParent<PlayerController>();
-
-        _playerGunChangeManager = transform.parent.parent.GetComponent<PlayerGunChangeManager>();
     }
 
     public PlayerController GetPlayerController()
@@ -28,11 +26,23 @@ public class PlayerGunController : MonoBehaviour
 
     public void DeactivateThisWeapon()
     {
+        SetPlayerIsHidingWeaponToTrue();
         PlayerGunAnimationManager.PlayHideGunAnimation();
     }
 
     public void ActivateThisWeapon()
     {
+        transform.parent.gameObject.SetActive(true);
         PlayerGunAnimationManager.PlayDrawGunAnimation();
+    }
+
+    private void SetPlayerIsHidingWeaponToTrue()
+    {
+        PlayerIsHidingWeapon = true;
+    }
+
+    public void SetPlayerIsHidingWeaponToFalse()
+    {
+        PlayerIsHidingWeapon = false;
     }
 }

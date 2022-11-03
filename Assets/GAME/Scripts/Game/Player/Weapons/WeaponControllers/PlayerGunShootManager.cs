@@ -87,8 +87,6 @@ public class PlayerGunShootManager : MonoBehaviour
         {
             Shoot();      
 
-     
-
             OnPlayerIsShooting?.Invoke();
 
             return;
@@ -98,7 +96,7 @@ public class PlayerGunShootManager : MonoBehaviour
    
     private bool CheckIfPlayerCanShoot()
     {
-        return _playerIsReadyToShoot && !PlayerIsReloading && BulletsLeft >= _bulletsPerShoot;
+        return _playerIsReadyToShoot && !PlayerIsReloading && BulletsLeft >= _bulletsPerShoot && !_playerGunController.PlayerIsHidingWeapon;
     }
 
     private void Shoot()
@@ -192,7 +190,7 @@ public class PlayerGunShootManager : MonoBehaviour
 
     private void ReloadGun()
     {
-        if (!PlayerIsReloading && BulletsLeft < GunMagazineSize && MaxBullets > 0)
+        if (!PlayerIsReloading && BulletsLeft < GunMagazineSize && MaxBullets > 0 && !_playerGunController.PlayerIsHidingWeapon)
         {
             PlayerIsReloading = true;
 

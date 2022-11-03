@@ -11,7 +11,7 @@ public class PlayerGunChangeManager : MonoBehaviour
 
     private int _currentActiveGunSlotIndex;
 
-    private bool _canChangeWeapon = true;
+    private bool _playerIsReadyToChangeWeapon = true;
 
     private void Awake()
     {
@@ -29,19 +29,14 @@ public class PlayerGunChangeManager : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-
-    }
-
     private void ChangeCurrentActiveGunToSlotZero()
     {
-        if (!_canChangeWeapon || _currentActiveGunSlotIndex == 0)
+        if (!CheckIfPlayerCanChangeWeapon() || _currentActiveGunSlotIndex == 0 )
         {
             return;
         }
 
-        _canChangeWeapon = false;
+        _playerIsReadyToChangeWeapon = false;
         _currentGunsInSlot[_currentActiveGunSlotIndex].DeactivateThisWeapon();
 
         _currentActiveGunSlotIndex = 0;
@@ -53,12 +48,12 @@ public class PlayerGunChangeManager : MonoBehaviour
 
     private void ChangeCurrentActiveGunToSlotOne()
     {
-        if (!_canChangeWeapon || _currentActiveGunSlotIndex == 1)
+        if (!CheckIfPlayerCanChangeWeapon() || _currentActiveGunSlotIndex == 1)
         {
             return;
         }
 
-        _canChangeWeapon = false;
+        _playerIsReadyToChangeWeapon = false;
         _currentGunsInSlot[_currentActiveGunSlotIndex].DeactivateThisWeapon();
 
         _currentActiveGunSlotIndex = 1;
@@ -68,6 +63,11 @@ public class PlayerGunChangeManager : MonoBehaviour
         Invoke(nameof(AllowPlayerChangeWeaponAgain), _delayToChangeWeapon);
     }
 
+    private bool CheckIfPlayerCanChangeWeapon()
+    {
+        return _playerIsReadyToChangeWeapon && !PlayerGlobalGunManager.PlayerIsReloading;
+    }
+
     public void AddGunToSlot(int slot, PlayerGunController gunToAdd)
     {
         _currentGunsInSlot[slot] = gunToAdd;
@@ -75,12 +75,11 @@ public class PlayerGunChangeManager : MonoBehaviour
 
     public void ChangeCurrentActiveWeapon()
     {
-        _currentGunsInSlot[_currentActiveGunSlotIndex].gameObject.transform.parent.gameObject.SetActive(true);
         _currentGunsInSlot[_currentActiveGunSlotIndex].ActivateThisWeapon();
     }
 
     private void AllowPlayerChangeWeaponAgain()
     {
-        _canChangeWeapon = true;
+        _playerIsReadyToChangeWeapon = true;
     }
 }
