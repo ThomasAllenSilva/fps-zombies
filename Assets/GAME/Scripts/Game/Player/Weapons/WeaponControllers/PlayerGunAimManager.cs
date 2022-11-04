@@ -7,7 +7,7 @@ public class PlayerGunAimManager : MonoBehaviour
 
     private static Transform _weaponAimPosition;
 
-    private static readonly int _weaponAimPositionChildIndex = 3;
+    private static readonly int _weaponAimPositionChildIndex = 4;
 
     private PlayerGunController _playerGunController;
 
