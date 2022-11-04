@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Threading.Tasks;
+using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 
-public class PlayerCharacterControllerManager : MonoBehaviour
+public class PlayerCharacterControllerManager : MonoBehaviour, IKnockBack
 {
     [SerializeField] private LayerMask _playerStepsLayerMask;
 
@@ -10,19 +11,17 @@ public class PlayerCharacterControllerManager : MonoBehaviour
 
     [Range(0.2f, 0.8f)] [SerializeField] private float _stepOffSet;
 
-    private PlayerKnockBackController _playerKnockBackController;
-
     private Rigidbody _playerRigidbody;
 
     private Vector3 _playerDesiredPosition;
 
     private const float climbStepSpeed = 4f;
 
+    private bool _isKnockingBacking;
+
     private void Awake()
     {
         _playerRigidbody = GetComponent<Rigidbody>();
-
-        _playerKnockBackController = GetComponent<PlayerController>().PlayerKnockBackController;
     }
 
     private void FixedUpdate()
@@ -34,7 +33,7 @@ public class PlayerCharacterControllerManager : MonoBehaviour
 
     private void MovePlayer()
     {
-        if (!_playerKnockBackController.IsKnockingBacking)
+        if (!_isKnockingBacking)
         {
             _playerRigidbody.velocity = _playerDesiredPosition * Time.fixedDeltaTime;
         }
@@ -50,18 +49,24 @@ public class PlayerCharacterControllerManager : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, _playerDesiredPosition.y, transform.position.z), climbStepSpeed * Time.fixedDeltaTime);
     }
 
-    public void AddForceToPlayer(Vector3 force)
-    {
-
-        _playerRigidbody.AddForce(force, ForceMode.Impulse);
-        
-
-    }
-
     public void ChangePlayerDirection(Vector3 directionPlayerShouldMove)
     {
         _playerDesiredPosition.x = directionPlayerShouldMove.x;
 
         _playerDesiredPosition.z = directionPlayerShouldMove.z;
+    }
+
+    public async void PlayKnockBackEffect(Vector3 knockBackDirection, float knockBackForce)
+    {
+        _isKnockingBacking = true;
+
+        knockBackDirection.y = 0;
+        knockBackDirection.x = 0;
+
+        _playerRigidbody.AddForce(knockBackDirection * knockBackForce, ForceMode.Impulse);
+
+        await Task.Delay(500);
+
+        _isKnockingBacking = false;
     }
 }

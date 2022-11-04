@@ -8,8 +8,6 @@ public class PlayerController : MonoBehaviour
 
     public PlayerMovement PlayerMovementManager { get; private set; }
 
-    public PlayerKnockBackController PlayerKnockBackController { get; private set; }
-
     public Transform PlayerCamera { get; private set; }
 
     private void Awake()
@@ -19,8 +17,6 @@ public class PlayerController : MonoBehaviour
         PlayerCharacterControllerManager = GetComponent<PlayerCharacterControllerManager>();
 
         PlayerMovementManager = GetComponent<PlayerMovement>();
-
-        PlayerKnockBackController = GetComponent<PlayerKnockBackController>();
 
         PlayerCamera = Camera.main.transform;
     }

@@ -30,7 +30,7 @@ public class EnemyAttackManager : MonoBehaviour
 
         if (_playerKnockBack == null)
         {
-            _playerKnockBack = FindObjectOfType<PlayerKnockBackController>().GetComponent<IKnockBack>();
+            _playerKnockBack = FindObjectOfType<PlayerCharacterControllerManager>().GetComponent<IKnockBack>();
         }
     }
 

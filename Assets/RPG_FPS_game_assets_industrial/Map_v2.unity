@@ -4248,7 +4248,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &85704090
 Transform:
   m_ObjectHideFlags: 0
@@ -4280,12 +4280,12 @@ MonoBehaviour:
   - objectToPool: {fileID: 4199826003216560411, guid: d8646eab31141204abb8b0b604e12978,
       type: 3}
     poolTag: EnemyTypeOne
-    poolSize: 5
+    poolSize: 1
   - objectToPool: {fileID: 2196719264471623403, guid: 705ada7153805d241963d9cb399229da,
       type: 3}
     poolTag: EnemyTypeTwo
     poolSize: 1
-  - objectToPool: {fileID: 4199826003216560411, guid: d8646eab31141204abb8b0b604e12978,
+  - objectToPool: {fileID: 2196719264471623403, guid: 705ada7153805d241963d9cb399229da,
       type: 3}
     poolTag: EnemyTypeThree
     poolSize: 1
@@ -29795,7 +29795,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &775592701
 Transform:
   m_ObjectHideFlags: 0
@@ -75590,7 +75590,6 @@ GameObject:
   - component: {fileID: 2037593665}
   - component: {fileID: 2037593664}
   - component: {fileID: 2037593663}
-  - component: {fileID: 2037593671}
   - component: {fileID: 2037593670}
   m_Layer: 8
   m_Name: Player
@@ -75711,18 +75710,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <MaxHealth>k__BackingField: 50
---- !u!114 &2037593671
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2037593662}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c2d720f36ca08045bf10bbdae6d265c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &2037593672
 Rigidbody:
   m_ObjectHideFlags: 0
