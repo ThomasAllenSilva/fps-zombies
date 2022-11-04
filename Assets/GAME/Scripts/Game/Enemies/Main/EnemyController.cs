@@ -10,6 +10,7 @@ public class EnemyController : MonoBehaviour
 
     private CapsuleCollider _capsuleCollider;
 
+    private static GameManager _gameManager;
   
     private void Awake()
     {
@@ -25,6 +26,11 @@ public class EnemyController : MonoBehaviour
     private void Start()
     {
         EnemyHealthManager.OnDie += DisableCapsuleCollider;
+
+        if (_gameManager == null)
+        {
+            _gameManager = GameManager.Instance;
+        }
     }
 
     private void DisableCapsuleCollider()
@@ -44,11 +50,11 @@ public class EnemyController : MonoBehaviour
 
     private void OnBecameInvisible()
     {
-        gameObject.SetActive(false);
-    }
+        if (!EnemyHealthManager.IsAlive)
+        {
+            gameObject.SetActive(false);
 
-    private void OnDisable()
-    {
-        
+            _gameManager.EnemySpawnerManager.ReduceCountOfActiveEnemies();
+        }
     }
 }

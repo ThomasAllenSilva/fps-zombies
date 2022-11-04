@@ -6,11 +6,11 @@ public class EnemyAttackManager : MonoBehaviour
 
     [SerializeField] private float _knockBackForce;
 
+    private static readonly string _playerTag = "Player";
+
     private static Damageable _playerDamageable;
 
     private static IKnockBack _playerKnockBack;
-
-    private static readonly string _playerTag = "Player";
 
     private BoxCollider _attackCollider;
 
