@@ -8,22 +8,10 @@ public class ObjectsPoolerManager : MonoBehaviour
 
     private Dictionary<string, Queue<GameObject>> poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
-    public static ObjectsPoolerManager Instance;
-
     private void Awake()
     {
-        if(Instance == null)
-        {
-            Instance = this;
-
-            InitializeObjectsPool();
-
-            return;   
-        }
-
-        Destroy(gameObject);
+        InitializeObjectsPool();
     }
-
 
     public bool SpawnObjectFromPool(string objectID, Vector3 positionToSpawn, Quaternion rotationToSpawn)
     {

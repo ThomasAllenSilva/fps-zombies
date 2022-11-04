@@ -10,8 +10,12 @@ public class EnemySpawnerManager : MonoBehaviour
 
     private int currentAmountOfEnemiesInGame;
 
+    private GameManager _gameManager;
+
     private void Start()
     {
+        _gameManager = GameManager.Instance;
+
         StartCoroutine(SpawnEnemies());
     }
 
@@ -25,7 +29,7 @@ public class EnemySpawnerManager : MonoBehaviour
 
             if (currentAmountOfEnemiesInGame < maxEnemiesInGame)
             {
-                bool spawnedSuccessfully = ObjectsPoolerManager.Instance.SpawnObjectFromPool(randomEnemy.ToString(), transform.TransformPoint(transform.localPosition), transform.rotation);
+                bool spawnedSuccessfully = _gameManager.ObjectsPoolerManager.SpawnObjectFromPool(randomEnemy.ToString(), transform.TransformPoint(transform.localPosition), transform.rotation);
 
                 if (spawnedSuccessfully)
                 {
