@@ -83,11 +83,15 @@ public class PlayerGunShootManager : MonoBehaviour
 
     private void Update()
     {
+       
         if (CheckIfPlayerCanShoot() && PlayerIsPressingShootButton)
         {
             Shoot();      
 
             OnPlayerIsShooting?.Invoke();
+
+     
+
 
             return;
         }
@@ -102,6 +106,7 @@ public class PlayerGunShootManager : MonoBehaviour
     private void Shoot()
     {
         PlayerIsShooting = true;
+
 
         PlayerGlobalGunManager.SetPlayerIsShootingButtonToTrue();
 
@@ -137,16 +142,15 @@ public class PlayerGunShootManager : MonoBehaviour
 
         if (BulletsLeft >= _bulletsPerShoot)
         {
+
             Invoke(nameof(PlayerIsReadyToShootAgain), _shootDelay);
+
 
             return;
         }
 
-        PlayerIsShooting = false;
 
-        PlayerGlobalGunManager.SetPlayerIsShootingButtonToFalse();
-
-        ReloadGun();
+        Invoke(nameof(ReloadGun), _shootDelay);
     }
 
     private void ChangeBulletSpreadRangeToDefaultValue()
@@ -192,6 +196,10 @@ public class PlayerGunShootManager : MonoBehaviour
     {
         if (!PlayerIsReloading && BulletsLeft < GunMagazineSize && MaxBullets > 0 && !_playerGunController.PlayerIsHidingWeapon)
         {
+            PlayerIsShooting = false;
+
+            PlayerGlobalGunManager.SetPlayerIsShootingButtonToFalse();
+
             PlayerIsReloading = true;
 
             PlayerGlobalGunManager.SetPlayerIsReloadingToTrue();

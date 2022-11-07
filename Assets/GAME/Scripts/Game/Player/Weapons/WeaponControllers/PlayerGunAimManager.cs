@@ -62,6 +62,8 @@ public class PlayerGunAimManager : MonoBehaviour
 
     private void OnEnable()
     {
+        StopAimWeapon();
+
         _playerGunController.GetPlayerController().PlayerInputsManager.OnPlayerIsPressingAimButton += AimWeapon;
 
         _playerGunController.GetPlayerController().PlayerInputsManager.OnPlayerStoppedPressingAimButtom += StopAimWeapon;

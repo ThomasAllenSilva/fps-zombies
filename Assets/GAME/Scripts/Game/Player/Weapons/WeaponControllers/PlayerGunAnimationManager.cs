@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Threading.Tasks;
 
 [RequireComponent(typeof(PlayerGunController))]
 
@@ -46,7 +47,7 @@ public class PlayerGunAnimationManager : CharacterAnimationController<PlayerGunA
 
         if (PlayerIsShooting() && !PlayerIsReloading())
         {
-            ChangeBlendTreeAnimationParameterValueTo(ShootAnimationFloatValue);
+            ChangeCurrentAnimationState(GunAnimationStates.Gun_Shoot);
             return;
         }
 
@@ -85,8 +86,16 @@ public class PlayerGunAnimationManager : CharacterAnimationController<PlayerGunA
         return _playerGunController.PlayerGunShootManager.PlayerIsReloading;
     }
 
-    private void ChangeBlendTreeAnimationParameterValueTo(float targetValue)
+    private async void ChangeBlendTreeAnimationParameterValueTo(float targetValue)
     {
+        if (_characterAnimator.GetCurrentAnimatorStateInfo(0).IsName("Gun_Shoot"))
+        {
+            while (_characterAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1)
+            {
+                await Task.Delay(100);
+            }
+        }
+
         ChangeCurrentAnimationState(GunAnimationStates.Gun_BlendTree);
 
         if (blendTreeAnimationParameterValue == targetValue)
@@ -139,7 +148,8 @@ public class PlayerGunAnimationManager : CharacterAnimationController<PlayerGunA
         Gun_BlendTree,
         Gun_Reload,
         Gun_Hide,
-        Gun_Inspect
+        Gun_Inspect,
+        Gun_Shoot
     }
 
     public void PlayHideGunAnimation()
