@@ -14,16 +14,19 @@ AnimatorStateMachine:
     m_Position: {x: 450, y: -20, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 703926993638532921}
-    m_Position: {x: 450, y: 130, z: 0}
+    m_Position: {x: 450, y: 180, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3281988837191761817}
     m_Position: {x: 450, y: 30, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7263036788177989191}
-    m_Position: {x: 450, y: 80, z: 0}
+    m_Position: {x: 450, y: 130, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3788949303801979003}
-    m_Position: {x: 450, y: 180, z: 0}
+    m_Position: {x: 450, y: 230, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: -1677042837150908050}
+    m_Position: {x: 450, y: 80, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -31,7 +34,7 @@ AnimatorStateMachine:
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: 470, y: -120, z: 0}
   m_EntryPosition: {x: 470, y: -80, z: 0}
-  m_ExitPosition: {x: 470, y: 230, z: 0}
+  m_ExitPosition: {x: 470, y: 280, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: -4464800752348303590}
 --- !u!1102 &-7263036788177989191
@@ -142,6 +145,32 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1102 &-1677042837150908050
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Gun_Shoot
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: 7d233263f8cd6d04ba6e6a24723149f6, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!91 &9100000
 AnimatorController:
   m_ObjectHideFlags: 0
@@ -223,14 +252,6 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 59f5832e2afd28340a9b6de2f9b1832c, type: 2}
     m_Threshold: 2
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: PlayerIsWalking
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 7d233263f8cd6d04ba6e6a24723149f6, type: 2}
-    m_Threshold: 3
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0

@@ -17,7 +17,7 @@ public class PlayerCharacterControllerManager : MonoBehaviour, IKnockBack
 
     private const float climbStepSpeed = 4f;
 
-    private bool _isKnockingBacking;
+    private bool _isKnockBacking;
 
     private void Awake()
     {
@@ -33,7 +33,7 @@ public class PlayerCharacterControllerManager : MonoBehaviour, IKnockBack
 
     private void MovePlayer()
     {
-        if (!_isKnockingBacking)
+        if (!_isKnockBacking)
         {
             _playerRigidbody.velocity = _playerDesiredPosition * Time.fixedDeltaTime;
         }
@@ -58,7 +58,12 @@ public class PlayerCharacterControllerManager : MonoBehaviour, IKnockBack
 
     public async void PlayKnockBackEffect(Vector3 knockBackDirection, float knockBackForce)
     {
-        _isKnockingBacking = true;
+        if (_isKnockBacking)
+        {
+            return;
+        }
+
+        _isKnockBacking = true;
 
         knockBackDirection.y = 0;
         knockBackDirection.x = 0;
@@ -67,6 +72,6 @@ public class PlayerCharacterControllerManager : MonoBehaviour, IKnockBack
 
         await Task.Delay(500);
 
-        _isKnockingBacking = false;
+        _isKnockBacking = false;
     }
 }

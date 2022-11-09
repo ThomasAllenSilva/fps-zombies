@@ -44,4 +44,14 @@
     {
         _characterAnimator.enabled = false;
     }
+
+    private void EnableAnimator()
+    {
+        _characterAnimator.enabled = true;
+    }
+
+    private void OnEnable()
+    {
+        EnableAnimator();
+    }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using UnityEngine;
 
 
@@ -32,4 +31,14 @@ public abstract class Damageable : MonoBehaviour
     }
 
     protected abstract void Die();
+
+    protected void SetCurrentHealthToMaxHealth()
+    {
+        CurrentHealth = MaxHealth;
+    }
+
+    protected void SetIsAliveToTrue()
+    {
+        IsAlive = true;
+    }
 }

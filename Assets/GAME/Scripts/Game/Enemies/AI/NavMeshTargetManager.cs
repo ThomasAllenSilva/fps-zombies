@@ -13,6 +13,8 @@ public class NavMeshTargetManager : MonoBehaviour
 
     private bool _canFollowTarget = true;
 
+    private float _defaultNavMeshSpeed;
+
     private void Awake()
     {
         _enemyNavMeshAgent = GetComponent<NavMeshAgent>();
@@ -26,6 +28,8 @@ public class NavMeshTargetManager : MonoBehaviour
             TargetToFollow = FindObjectOfType<PlayerController>().gameObject.transform;
         }
 
+        _defaultNavMeshSpeed = _enemyNavMeshAgent.speed;
+
         _enemyController.EnemyHealthManager.OnDie += StopFollowingTarget;
     }
 
@@ -33,16 +37,24 @@ public class NavMeshTargetManager : MonoBehaviour
     {
         if (!_canFollowTarget)
         {
-            _enemyNavMeshAgent.speed = 0;
+            _enemyNavMeshAgent.speed = 0f;
             return;
         }
 
         _enemyNavMeshAgent.SetDestination(TargetToFollow.position);
+        _enemyNavMeshAgent.speed = _defaultNavMeshSpeed;
     }
 
 
     private void StopFollowingTarget()
     {
         _canFollowTarget = false;
+        _enemyNavMeshAgent.enabled = false;
+    }
+
+    private void OnEnable()
+    {
+        _enemyNavMeshAgent.enabled = true;
+        _canFollowTarget = true;
     }
 }

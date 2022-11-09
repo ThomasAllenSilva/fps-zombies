@@ -4,6 +4,8 @@ public class GameManager : Singleton<GameManager>
 
     public EnemySpawnerManager EnemySpawnerManager { get; private set; }
 
+    public PlayerPointsManager PlayerPointsManager { get; private set; }
+
     protected override void Awake()
     {
         base.Awake(); 
@@ -11,5 +13,7 @@ public class GameManager : Singleton<GameManager>
         ObjectsPoolerManager = GetComponentInChildren<ObjectsPoolerManager>();
 
         EnemySpawnerManager = GetComponentInChildren<EnemySpawnerManager>();
+
+        PlayerPointsManager = GetComponentInChildren<PlayerPointsManager>();
     }
 }

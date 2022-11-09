@@ -11,7 +11,9 @@ public class EnemyController : MonoBehaviour
     private CapsuleCollider _capsuleCollider;
 
     private static GameManager _gameManager;
-  
+
+    [field: SerializeField] public int PointsFromThisEnemy { get; private set; }
+
     private void Awake()
     {
         EnemyCollisionsManager = GetComponentInChildren<EnemyCollisionsManager>();
