@@ -13,6 +13,6 @@ public class PlayerHealthManager : Damageable
 
     protected override void Die()
     {
-        
+        transform.gameObject.SetActive(false); 
     }
 }

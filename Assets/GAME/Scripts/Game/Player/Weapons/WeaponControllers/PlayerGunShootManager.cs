@@ -54,6 +54,8 @@ public class PlayerGunShootManager : MonoBehaviour
 
     public static event Action OnPlayerIsShooting;
 
+    public static event Action OnIncreaseBullets;
+
     private void Awake()
     {
         _playerGunController = GetComponent<PlayerGunController>();
@@ -85,13 +87,12 @@ public class PlayerGunShootManager : MonoBehaviour
     {
         if (CheckIfPlayerCanShoot() && PlayerIsPressingShootButton)
         {
-            Shoot();      
+           
 
+            Shoot();
             OnPlayerIsShooting?.Invoke();
-
             return;
         }
-
     }
 
    
@@ -102,6 +103,8 @@ public class PlayerGunShootManager : MonoBehaviour
 
     private void Shoot()
     {
+       
+
         PlayerIsShooting = true;
 
 
@@ -131,6 +134,12 @@ public class PlayerGunShootManager : MonoBehaviour
                     Damageable damageable = objectHitted.gameObject.GetComponent<Damageable>();
 
                     damageable.TakeDamage(_bulletDamage);
+
+                    if (!damageable.IsAlive)
+                    {
+                        MaxBullets += 25;
+                        OnIncreaseBullets?.Invoke();
+                    }
 
                     break;
                 }         

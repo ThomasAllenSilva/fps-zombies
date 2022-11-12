@@ -169,6 +169,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "WeaponSlotThree",
+                    "type": "Button",
+                    "id": "9ce578a2-a94c-4658-a500-d3f0a27b9e53",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -224,6 +233,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "WeaponSlotTwo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c3122137-587c-4818-a0b4-ef1f59a8614b",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WeaponSlotThree",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -46,7 +46,6 @@ public class EnemySpawnerManager : MonoBehaviour
 
                 int randomSpawner = Random.Range(0, _spawnPositions.Length);
 
-
                 bool spawnedSuccessfully = _gameManager.ObjectsPoolerManager.SpawnObjectFromPool(randomEnemy.ToString(), _spawnPositions[randomSpawner].position, _spawnPositions[randomSpawner].rotation);
 
                 if (spawnedSuccessfully)

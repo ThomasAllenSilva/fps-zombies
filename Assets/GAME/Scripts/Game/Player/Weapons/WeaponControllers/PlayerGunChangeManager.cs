@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PlayerGunChangeManager : MonoBehaviour
 {
@@ -23,10 +24,29 @@ public class PlayerGunChangeManager : MonoBehaviour
 
         _playerInputsManager.OnPlayerChangedWeaponSlotToOne += ChangeCurrentActiveGunToSlotOne;
 
+        _playerInputsManager.OnPlayerChangedWeaponToSlotTwo += ChangeCurrentActiveGunToSlotTwo;
+
         foreach (PlayerGunController gun in _currentGunsInSlot)
         {
             AddGunToSlot(gun.transform.parent.GetSiblingIndex(), gun);
         }
+    }
+
+    private void ChangeCurrentActiveGunToSlotTwo()
+    {
+        if (!CheckIfPlayerCanChangeWeapon() || _currentActiveGunSlotIndex == 2)
+        {
+            return;
+        }
+
+        _playerIsReadyToChangeWeapon = false;
+        _currentGunsInSlot[_currentActiveGunSlotIndex].DeactivateThisWeapon();
+
+        _currentActiveGunSlotIndex = 2;
+
+        ChangeCurrentActiveWeapon();
+
+        Invoke(nameof(AllowPlayerChangeWeaponAgain), _delayToChangeWeapon);
     }
 
     private void ChangeCurrentActiveGunToSlotZero()

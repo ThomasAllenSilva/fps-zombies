@@ -21,6 +21,8 @@ public class WeaponUIManager : MonoBehaviour
 
         PlayerGunShootManager.OnPlayerFinishedReloading += UpdateMagazineAmmo;
 
+        PlayerGunShootManager.OnIncreaseBullets += UpdateMagazineAmmo;
+
         PlayerGunShootManager.OnPlayerFinishedReloading += UpdateCurrentAmmoText;
 
         PlayerGlobalGunManager.OnChangedWeapon += UpdateAllValues;
