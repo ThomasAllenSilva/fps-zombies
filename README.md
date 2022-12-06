@@ -14,9 +14,14 @@ I applied the occlusion culling optimization technique to make the game run smoo
 
 ![2022-12-06-10-35-37_compressed](https://user-images.githubusercontent.com/104914533/205927531-e1cfc0d4-6be5-4b75-9236-42a0ab3a2ecb.gif)
 
+I studied and used cameras from the Cinemachine package to make the first-person camera editable and fully functional.
 
+![2022-12-06-10-41-06_compressed](https://user-images.githubusercontent.com/104914533/205929016-c0a4b57c-95ab-4bf8-84b6-0b8f9343929c.gif)
+
+
+
+and applied a leaderboard usingthe LootLocker package.
 
 I improved important concepts about OOP like polymorphism, using abstract classes and
-interfaces, and applying Generics to the classes. I studied and used cameras from the Cinemachine package and applied a leaderboard using
-the LootLocker package.
+interfaces, and applying Generics to the classes. 
 
